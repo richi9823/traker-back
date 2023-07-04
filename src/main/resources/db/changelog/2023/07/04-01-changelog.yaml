@@ -1,0 +1,616 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1688505929595-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: alert_arrival_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: alert_distance_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-3
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: alert_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-4
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: alert_speed_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-5
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: notification_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-6
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: position_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-7
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: user_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-8
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: vehicle_seq
+            startValue: 1
+  - changeSet:
+      id: 1688505929595-9
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_alert
+                  name: id
+                  type: INT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: silenced
+                  type: BOOLEAN
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: vehicle_id
+                  type: INT
+            schemaName: public
+            tableName: alert
+  - changeSet:
+      id: 1688505929595-10
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_alert_arrival
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: latitude
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: longitude
+                  type: DECIMAL
+            schemaName: public
+            tableName: alert_arrival
+  - changeSet:
+      id: 1688505929595-11
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_alert_distance
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: max_distance
+                  type: DECIMAL
+            schemaName: public
+            tableName: alert_distance
+  - changeSet:
+      id: 1688505929595-12
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_alert_speed
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: speed_limit
+                  type: DECIMAL
+            schemaName: public
+            tableName: alert_speed
+  - changeSet:
+      id: 1688505929595-13
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_gps_device
+                  name: traccar_device_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: register_device_id
+                  type: INT
+              - column:
+                  name: last_updated
+                  type: DATETIME
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: gps_device
+  - changeSet:
+      id: 1688505929595-14
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_image
+                  name: id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: image_data
+                  type: BLOB
+              - column:
+                  name: vehicle_id
+                  type: INT
+            schemaName: public
+            tableName: image
+  - changeSet:
+      id: 1688505929595-15
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_notification
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: read
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: alert_id
+                  type: INT
+            schemaName: public
+            tableName: notification
+  - changeSet:
+      id: 1688505929595-16
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: notification_id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: positions_id
+                  type: INT
+            schemaName: public
+            tableName: notification_positions
+  - changeSet:
+      id: 1688505929595-17
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_position
+                  name: id
+                  type: INT
+              - column:
+                  name: time
+                  type: DATETIME
+              - column:
+                  name: latitude
+                  type: DECIMAL
+              - column:
+                  name: longitude
+                  type: DECIMAL
+              - column:
+                  name: altitude
+                  type: DECIMAL
+              - column:
+                  name: speed
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gps_id
+                  type: VARCHAR(255)
+              - column:
+                  name: notification_id
+                  type: INT
+            schemaName: public
+            tableName: position
+  - changeSet:
+      id: 1688505929595-18
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: firstname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lastname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nickname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: user
+  - changeSet:
+      id: 1688505929595-19
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_vehicle
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: model
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: license
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gps_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: INT
+              - column:
+                  name: total_distance
+                  type: DECIMAL
+              - column:
+                  name: actual_distance
+                  type: DECIMAL
+            schemaName: public
+            tableName: vehicle
+  - changeSet:
+      id: 1688505929595-20
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: register_device_id
+            constraintName: uc_gps_device_register_device
+            schemaName: public
+            tableName: gps_device
+  - changeSet:
+      id: 1688505929595-21
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: positions_id
+            constraintName: uc_notification_positions_positions
+            schemaName: public
+            tableName: notification_positions
+  - changeSet:
+      id: 1688505929595-22
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uc_user_email
+            schemaName: public
+            tableName: user
+  - changeSet:
+      id: 1688505929595-23
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: nickname
+            constraintName: uc_user_nickname
+            schemaName: public
+            tableName: user
+  - changeSet:
+      id: 1688505929595-24
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: license
+            constraintName: uc_vehicle_license
+            schemaName: public
+            tableName: vehicle
+  - changeSet:
+      id: 1688505929595-25
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: alert_arrival
+            baseTableSchemaName: public
+            constraintName: FK_ALERT_ARRIVAL_ON_ID
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-26
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: alert_distance
+            baseTableSchemaName: public
+            constraintName: FK_ALERT_DISTANCE_ON_ID
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-27
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: alert
+            baseTableSchemaName: public
+            constraintName: FK_ALERT_ON_VEHICLE
+            referencedColumnNames: id
+            referencedTableName: vehicle
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-28
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: alert_speed
+            baseTableSchemaName: public
+            constraintName: FK_ALERT_SPEED_ON_ID
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-29
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: image
+            baseTableSchemaName: public
+            constraintName: FK_IMAGE_ON_VEHICLE
+            referencedColumnNames: id
+            referencedTableName: vehicle
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-30
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: alert_id
+            baseTableName: notification
+            baseTableSchemaName: public
+            constraintName: FK_NOTIFICATION_ON_ALERT
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-31
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gps_id
+            baseTableName: position
+            baseTableSchemaName: public
+            constraintName: FK_POSITION_ON_GPS
+            referencedColumnNames: traccar_device_id
+            referencedTableName: gps_device
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-32
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: notification_id
+            baseTableName: position
+            baseTableSchemaName: public
+            constraintName: FK_POSITION_ON_NOTIFICATION
+            referencedColumnNames: id
+            referencedTableName: notification
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-33
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gps_id
+            baseTableName: vehicle
+            baseTableSchemaName: public
+            constraintName: FK_VEHICLE_ON_GPS
+            referencedColumnNames: traccar_device_id
+            referencedTableName: gps_device
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-34
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: vehicle
+            baseTableSchemaName: public
+            constraintName: FK_VEHICLE_ON_USER
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-35
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: notification_id
+            baseTableName: notification_positions
+            baseTableSchemaName: public
+            constraintName: fk_notpos_on_notification_entity
+            referencedColumnNames: id
+            referencedTableName: notification
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1688505929595-36
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: positions_id
+            baseTableName: notification_positions
+            baseTableSchemaName: public
+            constraintName: fk_notpos_on_position_entity
+            referencedColumnNames: id
+            referencedTableName: position
+            referencedTableSchemaName: public
+
