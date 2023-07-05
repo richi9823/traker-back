@@ -17,6 +17,7 @@ public class AlertEntity {
 
     private String name;
 
+    @Column(columnDefinition = "boolean default false")
     private boolean silenced;
 
     @Enumerated(EnumType.STRING)

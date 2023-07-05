@@ -2,7 +2,7 @@ package com.ricardo.traker.service.impl;
 
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.GPSMapper;
-import com.ricardo.traker.model.dto.request.VehicleRequest;
+import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.entity.GPSEntity;
 import com.ricardo.traker.repository.GPSRepository;
 import com.ricardo.traker.service.GPSService;
@@ -30,10 +30,10 @@ public class GPSServiceImpl implements GPSService {
     GPSRepository gpsRepository;
 
     @Override
-    public GPSEntity createGPS(VehicleRequest vehicleRequest) throws ServiceException {
+    public GPSEntity createGPS(VehicleRequestDto vehicleRequestDto) throws ServiceException {
         Device device = new Device();
-        device.setUniqueId(vehicleRequest.getDeviceRegisterId().toString());
-        device.setName(vehicleRequest.getLicense());
+        device.setUniqueId(vehicleRequestDto.getDeviceRegisterId().toString());
+        device.setName(vehicleRequestDto.getLicense());
         try {
             Mono<Device> response = devicesApi.devicesPost(device);
             GPSEntity gpsEntity = gpsMapper.mapDeviceToGpsEntity(response.block());

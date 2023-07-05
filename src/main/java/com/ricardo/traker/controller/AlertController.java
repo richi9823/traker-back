@@ -1,13 +1,13 @@
 package com.ricardo.traker.controller;
 
 import com.ricardo.traker.exception.ServiceException;
-import com.ricardo.traker.model.dto.request.VehicleRequestDto;
-import com.ricardo.traker.model.dto.response.VehicleResponseDto;
+import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
+import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
+import com.ricardo.traker.service.AlertService;
 import com.ricardo.traker.service.VehicleService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,59 +16,54 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class VehicleController implements VehicleApi{
+public class AlertController implements AlertApi{
 
     @Autowired
     TokenUtils tokenUtils;
 
     @Autowired
-    VehicleService vehicleService;
+    AlertService alertService;
 
 
     private final HttpServletRequest request;
 
     @Autowired
-    public VehicleController(HttpServletRequest request){
+    public AlertController(HttpServletRequest request){
         this.request = request;
     }
 
 
-
     @Override
-    public ResponseEntity<VehicleResponseDto> registerVehicle(@Valid VehicleRequestDto vehicleRequestDto) throws ServiceException {
+    public ResponseEntity<AlertResponseDto> createAlert(AlertRequestDto alertRequestDto){
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         return ResponseEntity.ok()
-                .body(vehicleService.createVehicle(vehicleRequestDto, userDetails.getId()));
+                .body(alertService.createAlert(alertRequestDto));
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> editVehicle(Integer vehicleId, VehicleRequestDto vehicleRequestDto) {
+    public ResponseEntity<AlertResponseDto> editAlert(Integer alertId, AlertRequestDto alertRequestDto) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         return ResponseEntity.ok()
-                .body(vehicleService.editVehicle(vehicleId, vehicleRequestDto));
+                .body(alertService.editAlert(alertId, alertRequestDto));
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> removeVehicle(Integer vehicleId) {
+    public ResponseEntity<?> removeAlert(Integer alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        return ResponseEntity.ok()
-                .body(vehicleService.removeVehicle(vehicleId));
+        alertService.removeAlert(alertId);
+        return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<List<VehicleResponseDto>> getUserVehicles() {
+    public ResponseEntity<List<AlertResponseDto>> getVehicleAlerts(Integer vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
         return ResponseEntity.ok()
-                .body(vehicleService.getUserVehicles(userDetails.getId()));
+                .body(alertService.getVehicleAlerts(vehicleId));
     }
-
-
 }

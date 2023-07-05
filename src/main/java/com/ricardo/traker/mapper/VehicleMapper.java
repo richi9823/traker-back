@@ -1,6 +1,6 @@
 package com.ricardo.traker.mapper;
 
-import com.ricardo.traker.model.dto.request.VehicleRequest;
+import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import org.mapstruct.BeanMapping;
@@ -11,10 +11,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {
 
-    VehicleEntity mapVehicleRequestToVehicleEntity(VehicleRequest vehicleRequest);
+    VehicleEntity mapVehicleRequestToVehicleEntity(VehicleRequestDto vehicleRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy=NullValuePropertyMappingStrategy.IGNORE)
-    VehicleEntity mapVehicleRequestToVehicleEntity(VehicleRequest vehicleRequest, @MappingTarget VehicleEntity vehicleEntity);
+    VehicleEntity mapVehicleRequestToVehicleEntity(VehicleRequestDto vehicleRequestDto, @MappingTarget VehicleEntity vehicleEntity);
 
     VehicleResponseDto mapVehicleEntityToVehicleResponseDto(VehicleEntity vehicleEntity);
 

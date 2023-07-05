@@ -2,14 +2,13 @@ package com.ricardo.traker.service.impl;
 
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.VehicleMapper;
-import com.ricardo.traker.model.dto.request.VehicleRequest;
+import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.repository.VehicleRepository;
 import com.ricardo.traker.service.GPSService;
 import com.ricardo.traker.service.UserService;
 import com.ricardo.traker.service.VehicleService;
-import com.ricardo.traker.traccar.api.DevicesApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,9 +35,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public VehicleResponseDto createVehicle(VehicleRequest vehicleRequest, Integer userId) throws ServiceException {
-        VehicleEntity vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequest);
-        vehicleEntity.setGps(gpsService.createGPS(vehicleRequest));
+    public VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Integer userId) throws ServiceException {
+        VehicleEntity vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequestDto);
+        vehicleEntity.setGps(gpsService.createGPS(vehicleRequestDto));
         vehicleEntity.setUser(userService.getUserEntity(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         return vehicleMapper.mapVehicleEntityToVehicleResponseDto(
                 vehicleRepository.save(vehicleEntity)
@@ -46,9 +45,9 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleResponseDto editVehicle(Integer vehicleId, VehicleRequest vehicleRequest) {
+    public VehicleResponseDto editVehicle(Integer vehicleId, VehicleRequestDto vehicleRequestDto) {
         VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
-        vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequest, vehicleEntity);
+        vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequestDto, vehicleEntity);
         return vehicleMapper.mapVehicleEntityToVehicleResponseDto(
                 vehicleRepository.save(vehicleEntity)
         );

@@ -1,7 +1,7 @@
 package com.ricardo.traker.service;
 
 import com.ricardo.traker.exception.ServiceException;
-import com.ricardo.traker.model.dto.request.VehicleRequest;
+import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.VehicleEntity;
 
@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface VehicleService {
 
-    VehicleResponseDto createVehicle(VehicleRequest vehicleRequest, Integer userId) throws ServiceException;
+    VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Integer userId) throws ServiceException;
 
-    VehicleResponseDto editVehicle(Integer vehicleId, VehicleRequest vehicleRequest);
+    VehicleResponseDto editVehicle(Integer vehicleId, VehicleRequestDto vehicleRequestDto);
 
     VehicleResponseDto removeVehicle(Integer vehicleId);
 

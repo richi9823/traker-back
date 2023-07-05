@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1688578188417-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: boolean
+            columnName: silenced
+            tableName: alert
+
