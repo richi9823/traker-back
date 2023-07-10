@@ -51,11 +51,11 @@ public abstract class AlertMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract  AlertSpeedEntity mapAlertRequestDtoToAlertSpeedEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertSpeedEntity alertEntity);
 
-    @Mapping(target = "vehicleId", source = "vehicleEntity.id")
+    @Mapping(target = "vehicleId", source = "vehicle.id")
     public  abstract  AlertResponseDto mapAlertEntityToAlertResponseDto(AlertEntity alertEntity);
 
     @AfterMapping
-    private AlertResponseDto mapAlertEntityToAlertResponseDto(AlertEntity alertEntity, @MappingTarget AlertResponseDto alertResponseDto) {
+    AlertResponseDto mapAlertEntityToAlertResponseDto(AlertEntity alertEntity, @MappingTarget AlertResponseDto alertResponseDto) {
 
         if(alertEntity instanceof AlertSpeedEntity){
             alertResponseDto.setType(TypeAlertEnum.SPEED);

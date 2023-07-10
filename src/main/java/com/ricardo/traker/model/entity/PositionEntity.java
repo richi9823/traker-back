@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class PositionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private LocalDateTime time;

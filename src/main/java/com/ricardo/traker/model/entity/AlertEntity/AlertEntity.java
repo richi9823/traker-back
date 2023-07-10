@@ -1,9 +1,13 @@
 package com.ricardo.traker.model.entity.AlertEntity;
 
 import com.ricardo.traker.enums.TypeAlertEnum;
+import com.ricardo.traker.model.entity.NotificationEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
+import com.ricardo.traker.traccar.Notification;
 import lombok.Data;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Data
 @Table(name = "alert", schema = "public")
@@ -25,7 +29,10 @@ public class AlertEntity {
 
     @ManyToOne
     @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
-    private VehicleEntity vehicleEntity;
+    private VehicleEntity vehicle;
+
+    @OneToMany(mappedBy = "alert")
+    private List<NotificationEntity> notifications;
 
 
 }

@@ -41,21 +41,28 @@ public class ExternalApiConfiguration {
         traccarApiClient.setBasePath(traccarBasePath);
         traccarApiClient.setUsername(username);
         traccarApiClient.setPassword(password);
+        return traccarApiClient;
+    }
 
-        SessionApi sessionApi = this.sessionApi(traccarApiClient);
-
+    @Bean
+    public Mono<ResponseEntity<User>> webSocketConnection(SessionApi sessionApi, WebsocketClientConfig websocketClientConfig){
         try {
             Mono<ResponseEntity<User> > response = sessionApi.sessionPostWithHttpInfo(username, password);
             List<String> cookies = response.block().getHeaders().get("set-cookie");
             cookies.stream().filter(s -> s.startsWith("JSESSIONID")).findAny().ifPresentOrElse(
-                    token ->  new WebsocketClientConfig(traccarWebSocketPath, token),
+                    token ->  websocketClientConfig.initWebsocket(traccarWebSocketPath, token),
                     () -> log.error("Cookie not found")
             );
+            return response;
         } catch (WebClientResponseException e) {
             log.error("Error creating session");
         }
+        return null;
+    }
 
-        return traccarApiClient;
+    @Bean
+    WebsocketClientConfig websocketClientConfig(){
+        return new WebsocketClientConfig();
     }
 
 

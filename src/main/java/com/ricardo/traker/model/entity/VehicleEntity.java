@@ -27,10 +27,4 @@ public class VehicleEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private UserEntity user;
-
-    @Column(name = "total_distance")
-    private BigDecimal totalDistance;
-
-    @Column(name = "actual_distance")
-    private BigDecimal actualDistance;
 }

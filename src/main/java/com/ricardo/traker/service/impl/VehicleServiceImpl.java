@@ -2,8 +2,10 @@ package com.ricardo.traker.service.impl;
 
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.VehicleMapper;
+import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
+import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.repository.VehicleRepository;
 import com.ricardo.traker.service.GPSService;
@@ -73,4 +75,7 @@ public class VehicleServiceImpl implements VehicleService {
     public Optional<VehicleEntity> getVehicleEntity(Integer vehicleId) {
         return vehicleRepository.findById(vehicleId);
     }
+
+
+
 }

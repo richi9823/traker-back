@@ -1,6 +1,5 @@
 package com.ricardo.traker.service.impl;
 
-import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.AlertMapper;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
@@ -52,7 +51,7 @@ public class AlertServiceImpl implements AlertService {
     public AlertResponseDto createAlert(AlertRequestDto alertRequestDto) {
         VehicleEntity vehicleEntity = vehicleService.getVehicleEntity(alertRequestDto.getVehicleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not found"));
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
-        alertEntity.setVehicleEntity(vehicleEntity);
+        alertEntity.setVehicle(vehicleEntity);
         this.save(alertEntity);
         return alertMapper.mapAlertEntityToAlertResponseDto(alertEntity);
     }

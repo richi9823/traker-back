@@ -1,10 +1,7 @@
 package com.ricardo.traker.controller;
 
-import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
-import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
-import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +24,6 @@ public interface AlertApi {
     @RequestMapping(value = "/{alertId}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeAlert(@PathVariable Integer alertId);
 
-    @RequestMapping(value = "/{vehicleId}", method = RequestMethod.GET)
-    ResponseEntity<List<AlertResponseDto>> getVehicleAlerts(Integer vehicleId);
+    @RequestMapping(value = "/vehicle/{vehicleId}/alerts", method = RequestMethod.GET)
+    ResponseEntity<List<AlertResponseDto>> getVehicleAlerts(@PathVariable Integer vehicleId);
 }

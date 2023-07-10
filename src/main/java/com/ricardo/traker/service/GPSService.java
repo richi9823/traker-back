@@ -1,6 +1,8 @@
 package com.ricardo.traker.service;
 
 import com.ricardo.traker.exception.ServiceException;
+import com.ricardo.traker.model.dto.MessageWebSocket;
+import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.entity.GPSEntity;
 
@@ -12,4 +14,8 @@ public interface GPSService {
 
 
     Optional<GPSEntity> getGPSEntity(Integer gpsId);
+
+    void updateGPSByWebSocket(MessageWebSocket message);
+
+    void updateGPSByPosition(PositionsWebSocket message);
 }

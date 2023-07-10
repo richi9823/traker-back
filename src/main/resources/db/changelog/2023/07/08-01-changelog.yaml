@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1688505929595-1
+      id: 1688820446302-1
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -10,7 +10,7 @@ databaseChangeLog:
             sequenceName: alert_arrival_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-2
+      id: 1688820446302-2
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -20,7 +20,7 @@ databaseChangeLog:
             sequenceName: alert_distance_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-3
+      id: 1688820446302-3
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -30,7 +30,7 @@ databaseChangeLog:
             sequenceName: alert_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-4
+      id: 1688820446302-4
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -40,7 +40,7 @@ databaseChangeLog:
             sequenceName: alert_speed_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-5
+      id: 1688820446302-5
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -50,17 +50,7 @@ databaseChangeLog:
             sequenceName: notification_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-6
-      author: ricar (generated)
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createSequence:
-            incrementBy: 50
-            schemaName: public
-            sequenceName: position_seq
-            startValue: 1
-  - changeSet:
-      id: 1688505929595-7
+      id: 1688820446302-6
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -70,7 +60,7 @@ databaseChangeLog:
             sequenceName: user_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-8
+      id: 1688820446302-7
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -80,7 +70,7 @@ databaseChangeLog:
             sequenceName: vehicle_seq
             startValue: 1
   - changeSet:
-      id: 1688505929595-9
+      id: 1688820446302-8
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -97,10 +87,9 @@ databaseChangeLog:
                   name: name
                   type: VARCHAR(255)
               - column:
-                  constraints:
-                    nullable: false
+                  defaultValueBoolean: false
                   name: silenced
-                  type: BOOLEAN
+                  type: boolean
               - column:
                   name: type
                   type: VARCHAR(255)
@@ -112,7 +101,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert
   - changeSet:
-      id: 1688505929595-10
+      id: 1688820446302-9
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -138,7 +127,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_arrival
   - changeSet:
-      id: 1688505929595-11
+      id: 1688820446302-10
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -159,7 +148,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_distance
   - changeSet:
-      id: 1688505929595-12
+      id: 1688820446302-11
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -180,7 +169,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_speed
   - changeSet:
-      id: 1688505929595-13
+      id: 1688820446302-12
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -192,7 +181,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_gps_device
                   name: traccar_device_id
-                  type: VARCHAR(255)
+                  type: INT
               - column:
                   constraints:
                     nullable: false
@@ -207,7 +196,7 @@ databaseChangeLog:
             schemaName: public
             tableName: gps_device
   - changeSet:
-      id: 1688505929595-14
+      id: 1688820446302-13
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -241,7 +230,7 @@ databaseChangeLog:
             schemaName: public
             tableName: image
   - changeSet:
-      id: 1688505929595-15
+      id: 1688820446302-14
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -267,7 +256,7 @@ databaseChangeLog:
             schemaName: public
             tableName: notification
   - changeSet:
-      id: 1688505929595-16
+      id: 1688820446302-15
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -286,7 +275,7 @@ databaseChangeLog:
             schemaName: public
             tableName: notification_positions
   - changeSet:
-      id: 1688505929595-17
+      id: 1688820446302-16
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -318,14 +307,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: gps_id
-                  type: VARCHAR(255)
+                  type: INT
               - column:
                   name: notification_id
                   type: INT
             schemaName: public
             tableName: position
   - changeSet:
-      id: 1688505929595-18
+      id: 1688820446302-17
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -366,7 +355,7 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1688505929595-19
+      id: 1688820446302-18
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -393,7 +382,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: gps_id
-                  type: VARCHAR(255)
+                  type: INT
               - column:
                   constraints:
                     nullable: false
@@ -408,7 +397,7 @@ databaseChangeLog:
             schemaName: public
             tableName: vehicle
   - changeSet:
-      id: 1688505929595-20
+      id: 1688820446302-19
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -418,7 +407,7 @@ databaseChangeLog:
             schemaName: public
             tableName: gps_device
   - changeSet:
-      id: 1688505929595-21
+      id: 1688820446302-20
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -428,7 +417,7 @@ databaseChangeLog:
             schemaName: public
             tableName: notification_positions
   - changeSet:
-      id: 1688505929595-22
+      id: 1688820446302-21
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -438,7 +427,7 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1688505929595-23
+      id: 1688820446302-22
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -448,7 +437,7 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1688505929595-24
+      id: 1688820446302-23
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -458,7 +447,7 @@ databaseChangeLog:
             schemaName: public
             tableName: vehicle
   - changeSet:
-      id: 1688505929595-25
+      id: 1688820446302-24
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -471,7 +460,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-26
+      id: 1688820446302-25
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -484,7 +473,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-27
+      id: 1688820446302-26
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -497,7 +486,7 @@ databaseChangeLog:
             referencedTableName: vehicle
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-28
+      id: 1688820446302-27
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -510,7 +499,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-29
+      id: 1688820446302-28
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -523,7 +512,7 @@ databaseChangeLog:
             referencedTableName: vehicle
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-30
+      id: 1688820446302-29
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -536,7 +525,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-31
+      id: 1688820446302-30
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -549,7 +538,7 @@ databaseChangeLog:
             referencedTableName: gps_device
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-32
+      id: 1688820446302-31
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -562,7 +551,7 @@ databaseChangeLog:
             referencedTableName: notification
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-33
+      id: 1688820446302-32
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -575,7 +564,7 @@ databaseChangeLog:
             referencedTableName: gps_device
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-34
+      id: 1688820446302-33
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -588,7 +577,7 @@ databaseChangeLog:
             referencedTableName: user
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-35
+      id: 1688820446302-34
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -601,7 +590,7 @@ databaseChangeLog:
             referencedTableName: notification
             referencedTableSchemaName: public
   - changeSet:
-      id: 1688505929595-36
+      id: 1688820446302-35
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:

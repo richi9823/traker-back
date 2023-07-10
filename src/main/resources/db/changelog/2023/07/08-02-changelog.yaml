@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1688832237508-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: actual_distance
+                  type: DECIMAL
+              - column:
+                  name: motion
+                  type: BOOLEAN
+              - column:
+                  name: total_distance
+                  type: DECIMAL
+            tableName: gps_device
+  - changeSet:
+      id: 1688832237508-4
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropColumn:
+            columnName: actual_distance
+            tableName: vehicle
+        - dropColumn:
+            columnName: total_distance
+            tableName: vehicle
+

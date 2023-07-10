@@ -2,6 +2,8 @@ package com.ricardo.traker.model.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -11,7 +13,7 @@ public class GPSEntity {
 
     @Id
     @Column(name="traccar_device_id")
-    private String traccarDeviceId;
+    private Integer traccarDeviceId;
 
     @Column(name="register_device_id", unique = true, nullable = false)
     private Integer registerDeviceId;
@@ -21,7 +23,13 @@ public class GPSEntity {
 
     private String status;
 
+    @Column(name = "total_distance")
+    private BigDecimal totalDistance;
 
+    @Column(name = "actual_distance")
+    private BigDecimal actualDistance;
+
+    private Boolean motion;
 
 
 }
