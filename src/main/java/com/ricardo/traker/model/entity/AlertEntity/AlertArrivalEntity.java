@@ -1,13 +1,19 @@
 package com.ricardo.traker.model.entity.AlertEntity;
 
-import lombok.Data;
+import lombok.*;
 
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "alert_arrival", schema = "public")
 @Entity(name = "alert_arrival")
+@SuperBuilder
 public class AlertArrivalEntity extends  AlertEntity{
 
     @Column(nullable = false)

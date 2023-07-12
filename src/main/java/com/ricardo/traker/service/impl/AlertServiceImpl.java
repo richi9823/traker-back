@@ -1,5 +1,6 @@
 package com.ricardo.traker.service.impl;
 
+import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.mapper.AlertMapper;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
@@ -7,19 +8,25 @@ import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertSpeedEntity;
+import com.ricardo.traker.model.entity.NotificationEntity;
+import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.repository.AlertArrivalRepository;
 import com.ricardo.traker.repository.AlertDistanceRepository;
 import com.ricardo.traker.repository.AlertRepository;
 import com.ricardo.traker.repository.AlertSpeedRepository;
 import com.ricardo.traker.service.AlertService;
+import com.ricardo.traker.service.NotificationService;
 import com.ricardo.traker.service.VehicleService;
+import com.ricardo.traker.util.CompareDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +52,9 @@ public class AlertServiceImpl implements AlertService {
 
     @Autowired
     AlertMapper alertMapper;
+
+    @Autowired
+    NotificationService notificationService;
 
 
     @Override
@@ -96,6 +106,82 @@ public class AlertServiceImpl implements AlertService {
     @Override
     public Optional<AlertEntity> getAlertEntity(Integer alertId) {
         return alertRepository.findById(alertId);
+    }
+
+    @Override
+    public void checkAlerts(PositionEntity newPosition) {
+        vehicleService.getVehicleEntityByGpsId(newPosition.getGps().getTraccarDeviceId()).ifPresent(
+                v -> {
+                    List<AlertResponseDto> alerts = this.getVehicleAlerts(v.getId());
+                    alerts.stream().forEach(a -> {
+                        switch (a.getType()){
+                            case DISTANCE -> checkDistance(a.getId(), newPosition);
+                            case ARRIVAL -> checkArrival(a.getId(), newPosition);
+                            case SPEED -> checkSpeed(a.getId(), newPosition);
+                        }
+                    });
+                }
+        );
+    }
+
+    private void checkDistance(Integer id, PositionEntity position){
+        alertDistanceRepository.findById(id).ifPresent(
+                a ->{
+                   BigDecimal distanceKm = BigDecimal.valueOf(Math.acos(Math.sin(a.getPointReferenceLatitude().doubleValue()) * Math.sin(position.getLatitude().doubleValue())
+                            + Math.cos(a.getPointReferenceLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getPointReferenceLongitude().doubleValue()))
+                           * 6371);
+                   if(a.getMaxDistance().compareTo(distanceKm) < 0){
+                       Optional<NotificationEntity> notifications = Optional.empty();
+                       if(a.getNotifications() != null){
+                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                       }
+
+                       if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(10))){
+                           position.setNotification(notifications.get());
+                       }else{
+                           NotificationEntity notificationEntity = notificationService.createNotification(a, position);
+                           position.setNotification(notificationEntity);
+                       }
+
+                   }
+
+                }
+        );
+    }
+
+    private void checkArrival(Integer id, PositionEntity position){
+        alertArrivalRepository.findById(id).ifPresent(a ->{
+            BigDecimal distanceKm = BigDecimal.valueOf(Math.acos(Math.sin(a.getLatitude().doubleValue()) * Math.sin(position.getLatitude().doubleValue())
+                    + Math.cos(a.getLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getLongitude().doubleValue()))
+                    * 6371);
+            if(BigDecimal.valueOf(10).compareTo(distanceKm) > 0){
+                Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(30))){
+                    position.setNotification(notifications.get());
+                }else{
+                    NotificationEntity notificationEntity = notificationService.createNotification(a, position);
+                    position.setNotification(notificationEntity);
+                }
+
+            }
+        });
+
+
+    }
+
+    private void checkSpeed(Integer id, PositionEntity position){
+        alertSpeedRepository.findById(id).ifPresent(a ->{
+            if(a.getSpeedLimit().compareTo(position.getSpeed()) < 0){
+                Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(5))){
+                    position.setNotification(notifications.get());
+                }else{
+                    NotificationEntity notificationEntity = notificationService.createNotification(a, position);
+                    position.setNotification(notificationEntity);
+                }
+
+            }
+        });
     }
 
 

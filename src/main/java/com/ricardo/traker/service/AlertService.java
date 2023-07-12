@@ -6,6 +6,8 @@ import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
+import com.ricardo.traker.model.entity.NotificationEntity;
+import com.ricardo.traker.model.entity.PositionEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +23,6 @@ public interface AlertService {
     List<AlertResponseDto> getVehicleAlerts(Integer vehicleId);
 
     Optional<AlertEntity> getAlertEntity(Integer alertId);
+
+    void checkAlerts(PositionEntity newPosition);
 }

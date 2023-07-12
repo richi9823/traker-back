@@ -1,12 +1,18 @@
 package com.ricardo.traker.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
+
 @Table(name = "user", schema = "public")
 @Entity(name = "user")
-public class UserEntity {
+@SuperBuilder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserEntity extends SuperEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

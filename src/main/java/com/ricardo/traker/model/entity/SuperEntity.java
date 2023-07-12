@@ -10,16 +10,27 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @SuperBuilder
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public class SuperEntity {
 
     @Column(name = "created_date", nullable = false, updatable = false)
-    @CreatedDate
     private LocalDateTime createdDate;
 
     @Column(name = "modified_date")
-    @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @PrePersist
+    private void prePersist(){
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.modifiedDate = LocalDateTime.now();
+    }
 }

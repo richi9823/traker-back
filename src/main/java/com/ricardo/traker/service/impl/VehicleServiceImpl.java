@@ -76,6 +76,10 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleRepository.findById(vehicleId);
     }
 
+    @Override
+    public Optional<VehicleEntity> getVehicleEntityByGpsId(Integer gpsId) {
+        return vehicleRepository.findByGps_TraccarDeviceId(gpsId);
+    }
 
 
 }

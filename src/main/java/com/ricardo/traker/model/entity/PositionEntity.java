@@ -1,15 +1,21 @@
 package com.ricardo.traker.model.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Table(name = "position", schema = "public")
 @Entity(name = "position")
-public class PositionEntity {
+@SuperBuilder
+@NoArgsConstructor
+public class PositionEntity extends SuperEntity{
 
     @Id
     private Integer id;

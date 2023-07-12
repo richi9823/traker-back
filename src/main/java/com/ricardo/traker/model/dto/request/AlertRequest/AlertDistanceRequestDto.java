@@ -10,4 +10,10 @@ public class AlertDistanceRequestDto {
 
     @JsonProperty("max_distance")
     private BigDecimal maxDistance;
+
+    @JsonProperty("point_reference_latitude")
+    private BigDecimal pointReferenceLatitude;
+
+    @JsonProperty("point_reference_longitude")
+    private BigDecimal pointReferenceLongitude;
 }

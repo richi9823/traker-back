@@ -1,14 +1,20 @@
 package com.ricardo.traker.model.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Table(name = "vehicle", schema = "public")
 @Entity(name = "vehicle")
-public class VehicleEntity {
+@SuperBuilder
+@NoArgsConstructor
+public class VehicleEntity extends SuperEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

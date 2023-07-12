@@ -21,4 +21,6 @@ public interface VehicleService {
 
 
     Optional<VehicleEntity> getVehicleEntity(Integer vehicleId);
+
+    Optional<VehicleEntity> getVehicleEntityByGpsId(Integer gpsId);
 }

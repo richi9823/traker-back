@@ -1,15 +1,21 @@
 package com.ricardo.traker.model.entity;
 
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
-import lombok.Data;
+import lombok.*;
 
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
+
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Table(name = "notification", schema = "public")
 @Entity(name = "notification")
-public class NotificationEntity {
+@SuperBuilder
+@NoArgsConstructor
+public class NotificationEntity extends SuperEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

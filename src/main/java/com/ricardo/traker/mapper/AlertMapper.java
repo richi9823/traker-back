@@ -2,7 +2,6 @@ package com.ricardo.traker.mapper;
 
 import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
-import com.ricardo.traker.model.dto.request.AlertRequest.AlertSpeedRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertArrivalResponseDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertDistanceResponseDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
@@ -22,6 +21,8 @@ public abstract class AlertMapper {
     public  abstract AlertArrivalEntity mapAlertRequestDtoToAlertArrivalEntity(AlertRequestDto alertRequestDto);
 
     @Mapping(target = "maxDistance", source = "distance.maxDistance")
+    @Mapping(target = "pointReferenceLatitude", source = "distance.pointReferenceLatitude")
+    @Mapping(target = "pointReferenceLongitude", source = "distance.pointReferenceLongitude")
     public  abstract AlertDistanceEntity mapAlertRequestDtoToAlertDistanceEntity(AlertRequestDto alertRequestDto);
 
     @Mapping(target = "speedLimit", source = "speed.speedLimit")
@@ -30,7 +31,7 @@ public abstract class AlertMapper {
     public  abstract AlertEntity mapAlertRequestDtoToAlertEntity(AlertRequestDto alertRequestDto);
 
     @AfterMapping
-    AlertEntity afterMapAlertRequestDtoToAlertEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertEntity alertEntity) {
+    AlertEntity afterMapAlertRequestDtoToAlertEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertEntity.AlertEntityBuilder alertEntity) {
         return switch (alertRequestDto.getType()){
             case SPEED -> this.mapAlertRequestDtoToAlertSpeedEntity(alertRequestDto);
             case ARRIVAL -> this.mapAlertRequestDtoToAlertArrivalEntity(alertRequestDto);

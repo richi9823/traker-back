@@ -2,18 +2,26 @@ package com.ricardo.traker.model.entity.AlertEntity;
 
 import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.model.entity.NotificationEntity;
+import com.ricardo.traker.model.entity.SuperEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.traccar.Notification;
 import lombok.Data;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Data
+@SuperBuilder
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "alert", schema = "public")
 @Entity(name = "alert")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class AlertEntity {
+public class AlertEntity extends SuperEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +39,7 @@ public class AlertEntity {
     @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
     private VehicleEntity vehicle;
 
-    @OneToMany(mappedBy = "alert")
+    @OneToMany(mappedBy = "alert", fetch = FetchType.EAGER)
     private List<NotificationEntity> notifications;
 
 
