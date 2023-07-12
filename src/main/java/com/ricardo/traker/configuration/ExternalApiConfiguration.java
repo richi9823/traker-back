@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
@@ -22,9 +21,6 @@ public class ExternalApiConfiguration {
 
     @Value("${traccar.basePath}")
     private String traccarBasePath;
-
-    @Value("${traccar.webSocketBasePath}")
-    private String traccarWebSocketPath;
 
     @Value("${traccar.timeout:10000}")
     private Integer timeout;
@@ -50,7 +46,7 @@ public class ExternalApiConfiguration {
             Mono<ResponseEntity<User> > response = sessionApi.sessionPostWithHttpInfo(username, password);
             List<String> cookies = response.block().getHeaders().get("set-cookie");
             cookies.stream().filter(s -> s.startsWith("JSESSIONID")).findAny().ifPresentOrElse(
-                    token ->  websocketClientConfig.initWebsocket(traccarWebSocketPath, token),
+                    token ->  websocketClientConfig.initWebsocket(token),
                     () -> log.error("Cookie not found")
             );
             return response;
