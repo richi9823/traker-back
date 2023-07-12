@@ -28,6 +28,6 @@ public class NotificationEntity extends SuperEntity{
     @JoinColumn(name = "alert_id", nullable = false, updatable = false)
     private AlertEntity alert;
 
-    @OneToMany
+    @OneToMany(mappedBy = "notification")
     private List<PositionEntity> positions;
 }
