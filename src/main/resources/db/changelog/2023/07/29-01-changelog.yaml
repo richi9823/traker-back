@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1690637537629-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: notification_positions
+            constraintName: fk_notpos_on_notification_entity
+        - dropUniqueConstraint:
+            constraintName: uc_notification_positions_positions
+            tableName: notification_positions
+  - changeSet:
+      id: 1690637537629-3
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: notification_positions
+            constraintName: fk_notpos_on_position_entity
+  - changeSet:
+      id: 1690637537629-5
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: notification_positions
+  - changeSet:
+      id: 1690637537629-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: int
+            columnName: vehicle_id
+            tableName: gps_device
+

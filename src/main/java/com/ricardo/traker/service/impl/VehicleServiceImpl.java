@@ -4,6 +4,7 @@ import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.VehicleMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
+import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
@@ -12,6 +13,10 @@ import com.ricardo.traker.service.GPSService;
 import com.ricardo.traker.service.UserService;
 import com.ricardo.traker.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -56,6 +61,12 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public VehicleResponseDto getVehicle(Integer vehicleId) {
+        VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
+        return vehicleMapper.mapVehicleEntityToVehicleResponseDto(vehicleEntity);
+    }
+
+    @Override
     public VehicleResponseDto removeVehicle(Integer vehicleId) {
         VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
         vehicleRepository.deleteById(vehicleId);
@@ -63,12 +74,13 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleResponseDto> getUserVehicles(Integer userId) {
-        return vehicleRepository
-                .findByUser_Id(userId)
-                .stream()
-                .map(vehicleMapper::mapVehicleEntityToVehicleResponseDto)
-                .collect(Collectors.toList());
+    public ListResponse<VehicleResponseDto> getUserVehicles(Integer userId, Integer page, Integer size, String sort) {
+        Page<VehicleEntity> result = vehicleRepository.findAll(Specification.where(VehicleRepository.userIs(userId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+        ListResponse<VehicleResponseDto> response = new ListResponse<>();
+        response.setItems(result.get().map(vehicleMapper::mapVehicleEntityToVehicleResponseDto)
+                .collect(Collectors.toList()));
+        response.setTotal(result.getTotalElements());
+        return response;
     }
 
     @Override

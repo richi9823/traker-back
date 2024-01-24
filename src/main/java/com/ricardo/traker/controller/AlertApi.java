@@ -2,16 +2,17 @@ package com.ricardo.traker.controller;
 
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.ListResponse;
+import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/alert")
+@SecurityRequirement(name = "Bearer Authentication")
 public interface AlertApi {
     @RequestMapping(value = "", method = RequestMethod.POST)
     ResponseEntity<AlertResponseDto> createAlert(@RequestBody @Valid AlertRequestDto alertRequestDto);
@@ -20,10 +21,15 @@ public interface AlertApi {
     @RequestMapping(value = "/{alertId}", method = RequestMethod.PUT)
     ResponseEntity<AlertResponseDto> editAlert(@PathVariable Integer alertId, @RequestBody AlertRequestDto vehicleRequestDto);
 
+    @RequestMapping(value = "/{alertId}", method = RequestMethod.GET)
+    ResponseEntity<AlertResponseDto> getAlert(@PathVariable Integer alertId);
 
     @RequestMapping(value = "/{alertId}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeAlert(@PathVariable Integer alertId);
 
     @RequestMapping(value = "/vehicle/{vehicleId}/alerts", method = RequestMethod.GET)
-    ResponseEntity<List<AlertResponseDto>> getVehicleAlerts(@PathVariable Integer vehicleId);
+    ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(@PathVariable Integer vehicleId,
+                                                                    @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                    @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
+                                                                    @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
 }

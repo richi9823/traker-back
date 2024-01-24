@@ -1,5 +1,6 @@
 package com.ricardo.traker.model.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 @Data
@@ -15,5 +16,8 @@ public class UserResponseDto {
     private String nickname;
 
     private String email;
+
+    @JsonProperty("access_token")
+    private String accessToken;
 
 }

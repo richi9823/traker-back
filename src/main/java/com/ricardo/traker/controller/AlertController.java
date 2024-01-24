@@ -3,6 +3,7 @@ package com.ricardo.traker.controller;
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
 import com.ricardo.traker.service.AlertService;
@@ -52,6 +53,15 @@ public class AlertController implements AlertApi{
     }
 
     @Override
+    public ResponseEntity<AlertResponseDto> getAlert(Integer alertId) {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        return ResponseEntity.ok()
+                .body(alertService.getAlert(alertId));
+    }
+
+    @Override
     public ResponseEntity<?> removeAlert(Integer alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -60,10 +70,10 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<List<AlertResponseDto>> getVehicleAlerts(Integer vehicleId) {
+    public ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(Integer vehicleId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok()
-                .body(alertService.getVehicleAlerts(vehicleId));
+                .body(alertService.getVehicleAlerts(vehicleId, page, size, sort));
     }
 }

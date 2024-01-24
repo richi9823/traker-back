@@ -17,9 +17,9 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Intege
         return (position, query, criteriaBuilder) -> criteriaBuilder.equal(position.get("gps").get("vehicle").get("id"), vehicleId);
     }
 
-    static Specification<PositionEntity> hasInterval(String till, IntervalEnum intervalEnum) {
+    static Specification<PositionEntity> hasInterval(LocalDateTime till, IntervalEnum intervalEnum) {
         return (position, query, criteriaBuilder) -> {
-            LocalDateTime tillTime = LocalDateTime.parse(till);
+            LocalDateTime tillTime = till;
             LocalDateTime sinceTime = tillTime;
             switch (intervalEnum) {
                 case _30MIN -> sinceTime = tillTime.minusMinutes(30);

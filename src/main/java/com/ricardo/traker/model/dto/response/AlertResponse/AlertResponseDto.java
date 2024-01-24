@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ricardo.traker.enums.TypeAlertEnum;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class AlertResponseDto {
 
@@ -23,4 +25,10 @@ public class AlertResponseDto {
     private AlertDistanceResponseDto distance;
 
     private AlertSpeedResponseDto speed;
+
+    @JsonProperty("created_date")
+    private LocalDateTime createdDate;
+
+    @JsonProperty("modified_date")
+    private LocalDateTime modifiedDate;
 }

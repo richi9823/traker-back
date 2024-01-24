@@ -4,6 +4,7 @@ import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.mapper.AlertMapper;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
@@ -21,6 +22,10 @@ import com.ricardo.traker.service.VehicleService;
 import com.ricardo.traker.util.CompareDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -67,6 +72,13 @@ public class AlertServiceImpl implements AlertService {
     }
 
     @Override
+    public AlertResponseDto getAlert(Integer id) {
+        return alertMapper.mapAlertEntityToAlertResponseDto(
+                alertRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"))
+        );
+    }
+
+    @Override
     public AlertResponseDto editAlert(Integer alertId, AlertRequestDto alertRequestDto) {
 
         AlertEntity alertEntity = alertRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
@@ -101,6 +113,15 @@ public class AlertServiceImpl implements AlertService {
     @Override
     public List<AlertResponseDto> getVehicleAlerts(Integer vehicleId) {
         return alertRepository.findByVehicle_Id(vehicleId).stream().map(alertMapper::mapAlertEntityToAlertResponseDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public ListResponse<AlertResponseDto> getVehicleAlerts(Integer vehicleId, Integer page, Integer size, String sort) {
+        Page<AlertEntity> result = alertRepository.findAll(Specification.where(AlertRepository.vehicleIs(vehicleId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+        ListResponse<AlertResponseDto> response = new ListResponse<>();
+        response.setItems(result.get().map(alertMapper::mapAlertEntityToAlertResponseDto).collect(Collectors.toList()));
+        response.setTotal(result.getTotalElements());
+        return response;
     }
 
     @Override

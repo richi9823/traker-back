@@ -62,7 +62,7 @@ public class GPSServiceImpl implements GPSService {
                     g.setLastUpdated(LocalDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
                     g.setStatus(d.getStatus());
                     gpsRepository.save(g);
-                    log.info("device updated");
+                    log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
                 });
             });
         }
@@ -76,7 +76,7 @@ public class GPSServiceImpl implements GPSService {
                 g.setTotalDistance(position.getAttributes().getTotalDistance());
                 g.setMotion(position.getAttributes().getMotion());
                 gpsRepository.save(g);
-                log.info("gps updated");
+                log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
             });
         }
     }

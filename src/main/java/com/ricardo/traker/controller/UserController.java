@@ -60,7 +60,8 @@ public class UserController implements UserApi{
                 userDetails.getFirstname(),
                 userDetails.getLastname(),
                 userDetails.getUsername(),
-                userDetails.getEmail()));
+                userDetails.getEmail(),
+                "Bearer " + jwt));
     }
 
     @Override
@@ -79,7 +80,8 @@ public class UserController implements UserApi{
                         userDetails.getFirstname(),
                         userDetails.getLastname(),
                         userDetails.getUsername(),
-                        userDetails.getEmail()));
+                        userDetails.getEmail(),
+                        request.getHeader("Authorization")));
     }
 
 }

@@ -2,6 +2,7 @@ package com.ricardo.traker.controller;
 
 import com.ricardo.traker.enums.IntervalEnum;
 import com.ricardo.traker.model.dto.response.PositionsResponseDto;
+import com.ricardo.traker.model.dto.response.RoutesResponseDto;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
 import com.ricardo.traker.service.PositionService;
@@ -31,13 +32,19 @@ public class PositionsController implements PositionsApi{
         this.request = request;
     }
     @Override
-    public ResponseEntity<List<PositionsResponseDto>> getVehiclePositions(Integer vehicleId, String since, IntervalEnum interval) {
+    public ResponseEntity<PositionsResponseDto> getVehiclePosition(Integer vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
-                positionService.getPositions(vehicleId,
-                        Optional.ofNullable(since).orElse(LocalDateTime.now().toString()),
-                        Optional.ofNullable(interval).orElse(IntervalEnum._3H))
+                positionService.getPosition(vehicleId)
         );
+    }
+
+    @Override
+    public ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(Integer vehicleId, String since, IntervalEnum interval) {
+        return  ResponseEntity.ok(positionService.getRoutes(
+                vehicleId,
+                LocalDateTime.parse( Optional.ofNullable(since).orElse(LocalDateTime.now().toString())),
+                Optional.ofNullable(interval).orElse(IntervalEnum._3H)));
     }
 }

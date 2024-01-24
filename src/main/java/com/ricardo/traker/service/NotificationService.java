@@ -1,5 +1,6 @@
 package com.ricardo.traker.service;
 
+import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.NotificationResponseDto;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
 import com.ricardo.traker.model.entity.NotificationEntity;
@@ -13,12 +14,14 @@ public interface NotificationService {
 
     void readNotification(Integer id);
 
-    List<NotificationResponseDto> getNotifications(Integer userId);
+    NotificationResponseDto getNotification(Integer id);
 
-    List<NotificationResponseDto> getVehicleNotifications(Integer vehicleId);
+    ListResponse<NotificationResponseDto> getNotifications(Integer userId, Integer page, Integer size, String sort);
 
-    List<NotificationResponseDto> getAlertNotifications(Integer alertId);
+    ListResponse<NotificationResponseDto> getVehicleNotifications(Integer vehicleId, Integer page, Integer size, String sort);
 
-    List<NotificationResponseDto> getPendingNotifications(Integer userId);
+    ListResponse<NotificationResponseDto> getAlertNotifications(Integer alertId, Integer page, Integer size, String sort);
+
+    ListResponse<NotificationResponseDto> getPendingNotifications(Integer userId, Integer page, Integer size, String sort);
 
 }

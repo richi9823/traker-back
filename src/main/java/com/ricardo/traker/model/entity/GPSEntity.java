@@ -37,7 +37,7 @@ public class GPSEntity extends SuperEntity{
     private Boolean motion;
 
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
+    @JoinColumn(name = "vehicle_id")
     private VehicleEntity vehicle;
 
 

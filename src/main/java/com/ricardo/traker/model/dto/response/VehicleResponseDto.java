@@ -3,6 +3,7 @@ package com.ricardo.traker.model.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 public class VehicleResponseDto {
@@ -14,9 +15,11 @@ public class VehicleResponseDto {
 
     private GPSResponseDto gps;
 
-    @JsonProperty("total_distance")
-    private BigDecimal totalDistance;
+    @JsonProperty("created_date")
+    private LocalDateTime createdDate;
 
-    @JsonProperty("actual_distance")
-    private BigDecimal actualDistance;
+    @JsonProperty("modified_date")
+    private LocalDateTime modifiedDate;
+
+
 }

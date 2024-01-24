@@ -1,6 +1,7 @@
 package com.ricardo.traker.controller;
 
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.NotificationResponseDto;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
@@ -36,38 +37,47 @@ public class NotificationController implements NotificationApi{
     }
 
     @Override
-    public ResponseEntity<List<NotificationResponseDto>> getNotifications() {
+    public ResponseEntity<NotificationResponseDto> getNotification(Integer notificationId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
-                notificationService.getNotifications(userDetails.getId())
+                notificationService.getNotification(notificationId)
         );
     }
 
     @Override
-    public ResponseEntity<List<NotificationResponseDto>> getPendingNotifications() {
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getNotifications(Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
-                notificationService.getPendingNotifications(userDetails.getId())
+                notificationService.getNotifications(userDetails.getId(), page, size, sort)
         );
     }
 
     @Override
-    public ResponseEntity<List<NotificationResponseDto>> getVehicleNotifications(Integer vehicleId) {
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getPendingNotifications(Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
-                notificationService.getVehicleNotifications(vehicleId)
+                notificationService.getPendingNotifications(userDetails.getId(), page, size, sort)
         );
     }
 
     @Override
-    public ResponseEntity<List<NotificationResponseDto>> getAlertNotifications(Integer alertId) {
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(Integer vehicleId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
-                notificationService.getAlertNotifications(alertId)
+                notificationService.getVehicleNotifications(vehicleId, page, size, sort)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(Integer alertId, Integer page, Integer size, String sort) {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(
+                notificationService.getAlertNotifications(alertId, page, size, sort)
         );
     }
 }
