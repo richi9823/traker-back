@@ -6,6 +6,7 @@ import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.entity.VehicleEntity;
+import com.ricardo.traker.repository.UserRepository;
 import com.ricardo.traker.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,20 +27,20 @@ public class VehicleService {
     VehicleRepository vehicleRepository;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     VehicleMapper vehicleMapper;
 
     @Autowired
     GPSService gpsService;
+
+    @Autowired
+    UserRepository userRepository;
 
 
 
     public VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Long userId) throws ServiceException {
         VehicleEntity vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequestDto);
         //vehicleEntity.setGps(gpsService.createGPS(vehicleRequestDto));
-        vehicleEntity.setUser(userService.getUserEntity(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
+        vehicleEntity.setUser(userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         return vehicleMapper.mapVehicleEntityToVehicleResponseDto(
                 vehicleRepository.save(vehicleEntity)
         );

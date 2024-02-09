@@ -11,10 +11,7 @@ import com.ricardo.traker.model.entity.AlertEntity.AlertSpeedEntity;
 import com.ricardo.traker.model.entity.NotificationEntity;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
-import com.ricardo.traker.repository.AlertArrivalRepository;
-import com.ricardo.traker.repository.AlertDistanceRepository;
-import com.ricardo.traker.repository.AlertRepository;
-import com.ricardo.traker.repository.AlertSpeedRepository;
+import com.ricardo.traker.repository.*;
 import com.ricardo.traker.service.NotificationService;
 import com.ricardo.traker.service.VehicleService;
 import com.ricardo.traker.util.CompareDate;
@@ -39,9 +36,6 @@ import java.util.stream.Collectors;
 public class AlertService {
 
     @Autowired
-    VehicleService vehicleService;
-
-    @Autowired
     AlertRepository alertRepository;
 
     @Autowired
@@ -59,10 +53,13 @@ public class AlertService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    VehicleRepository vehicleRepository;
+
 
 
     public AlertResponseDto createAlert(AlertRequestDto alertRequestDto) {
-        VehicleEntity vehicleEntity = vehicleService.getVehicleEntity(alertRequestDto.getVehicleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not found"));
+        VehicleEntity vehicleEntity = vehicleRepository.findById(alertRequestDto.getVehicleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not found"));
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
         alertEntity.setVehicle(vehicleEntity);
         this.save(alertEntity);
