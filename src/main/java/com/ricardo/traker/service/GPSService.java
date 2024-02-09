@@ -71,15 +71,21 @@ public class GPSService {
     }
 
 
-    public void updateGPSByPosition(PositionsWebSocket position) {
-        if(position.getAttributes() != null){
-            gpsRepository.findById(position.getDeviceId()).ifPresent(g -> {
-                g.setActualDistance(position.getAttributes().getDistance());
-                g.setTotalDistance(position.getAttributes().getTotalDistance());
-                g.setMotion(position.getAttributes().getMotion());
-                gpsRepository.save(g);
-                log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
+    public void updateGPS(MessageWebSocket message) {
+        if(message.getPositions() != null) {
+            message.getPositions().forEach(position -> {
+                if (position.getAttributes() != null) {
+                    gpsRepository.findById(position.getDeviceId()).ifPresent(g -> {
+                        g.setActualDistance(position.getAttributes().getDistance());
+                        g.setTotalDistance(position.getAttributes().getTotalDistance());
+                        g.setMotion(position.getAttributes().getMotion());
+                        gpsRepository.save(g);
+                        log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
+                        routeService.updateRoutes(message, g);
+                    });
+                }
             });
+
         }
     }
 

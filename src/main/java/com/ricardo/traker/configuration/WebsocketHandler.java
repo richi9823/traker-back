@@ -12,19 +12,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WebsocketHandler {
 
-
-    private static PositionService positionService;
     private static GPSService gpsService;
 
     @Autowired
     public WebsocketHandler(PositionService positionService,
                             GPSService gpsService){
-        this.positionService = positionService;
         this.gpsService = gpsService;
     }
 
     public void saveDeviceInfo(MessageWebSocket messageWebSocket) {
-        positionService.updatePositions(messageWebSocket);
+        gpsService.updateGPS(messageWebSocket);
         gpsService.updateGPSByWebSocket(messageWebSocket);
     }
 }

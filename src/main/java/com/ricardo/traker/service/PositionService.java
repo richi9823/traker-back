@@ -5,6 +5,7 @@ import com.ricardo.traker.mapper.PositionMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.response.PositionsResponseDto;
 import com.ricardo.traker.model.dto.response.RoutesResponseDto;
+import com.ricardo.traker.model.entity.GPSEntity;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.repository.PositionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,36 +26,29 @@ public class PositionService {
     PositionRepository positionRepository;
 
     @Autowired
-    GPSService gpsService;
-
-    @Autowired
     PositionMapper positionMapper;
 
     @Autowired
     AlertService alertService;
 
 
-    public void updatePositions(MessageWebSocket message) {
-        if(message.getPositions() != null){
-            message.getPositions().stream().forEach(p -> {
-                if(!positionRepository.existsById(p.getId())){
-                    gpsService.getGPSEntity(p.getDeviceId()).ifPresent( g -> {
-                        PositionEntity positionEntity = positionMapper.mapPositionWebSocketToPositionEntity(p);
-                        //positionEntity.setGps(g);
-                        alertService.checkAlerts(positionEntity);
-                        positionRepository.save(positionEntity);
-                        log.info("Positions updated - device: "
-                                + p.getDeviceId() + " latitude: "
-                                + p.getLatitude() + " longitude "
-                                + p.getLongitude() + " speed: "
-                                + p.getSpeed() + " date: "
-                                + p.getServerTime());
-                        gpsService.updateGPSByPosition(p);
+    public void updatePositions(MessageWebSocket message, GPSEntity g) {
+       message.getPositions().stream().forEach(p -> {
+           if(!positionRepository.existsById(p.getId())){
+                   PositionEntity positionEntity = positionMapper.mapPositionWebSocketToPositionEntity(p);
+                   //positionEntity.setGps(g);
+                   alertService.checkAlerts(positionEntity);
+                   positionRepository.save(positionEntity);
+                   log.info("Positions updated - device: "
+                           + p.getDeviceId() + " latitude: "
+                           + p.getLatitude() + " longitude "
+                           + p.getLongitude() + " speed: "
+                           + p.getSpeed() + " date: "
+                           + p.getServerTime());
 
-                    });
-                }
-            });
-        }
+           }
+       });
+
     }
 
 
