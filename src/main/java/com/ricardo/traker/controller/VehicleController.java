@@ -46,7 +46,7 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> getVehicle(Integer vehicleId) {
+    public ResponseEntity<VehicleResponseDto> getVehicle(Long vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -56,7 +56,7 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> editVehicle(Integer vehicleId, VehicleRequestDto vehicleRequestDto) {
+    public ResponseEntity<VehicleResponseDto> editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -65,12 +65,11 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> removeVehicle(Integer vehicleId) {
+    public ResponseEntity<VehicleResponseDto> removeVehicle(Long vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        return ResponseEntity.ok()
-                .body(vehicleService.removeVehicle(vehicleId));
+        vehicleService.deleteById(vehicleId);
+        return ResponseEntity.ok().build();
     }
 
     @Override

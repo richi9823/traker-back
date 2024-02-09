@@ -11,9 +11,9 @@ import java.util.Date;
 @Data
 public class PositionsWebSocket {
 
-    private Integer id;
+    private Long id;
 
-    private Integer deviceId;
+    private Long deviceId;
 
     private AttributesWebsocket attributes;
 

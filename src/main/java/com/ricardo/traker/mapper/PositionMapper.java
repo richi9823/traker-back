@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -18,7 +19,7 @@ public abstract class PositionMapper {
 
     public abstract PositionsResponseDto mapPositionEntityToPositionResponse (PositionEntity positionEntity);
 
-    LocalDateTime mapDateToLocalDateTime(Date date){
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    OffsetDateTime mapDateToLocalDateTime(Date date){
+        return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }

@@ -17,10 +17,10 @@ import java.util.List;
 public interface PositionsApi {
 
     @RequestMapping(value = "/vehicle/{vehicleId}/position", method = RequestMethod.GET)
-    ResponseEntity<PositionsResponseDto> getVehiclePosition(@PathVariable Integer vehicleId);
+    ResponseEntity<PositionsResponseDto> getVehiclePosition(@PathVariable Long vehicleId);
 
     @RequestMapping(value = "/vehicle/{vehicleId}/routes", method = RequestMethod.GET)
-    ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(@PathVariable Integer vehicleId,
+    ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(@PathVariable Long vehicleId,
                                                              @RequestParam(value = "since", required = false) String since,
                                                              @RequestParam(value = "interval", required = false) IntervalEnum interval);
 }

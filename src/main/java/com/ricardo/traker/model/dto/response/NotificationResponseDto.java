@@ -5,12 +5,13 @@ import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
 public class NotificationResponseDto {
 
-    private Integer id;
+    private Long id;
 
     private boolean read;
 
@@ -19,5 +20,5 @@ public class NotificationResponseDto {
     private List<PositionsResponseDto> positions;
 
     @JsonProperty("created_date")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 }

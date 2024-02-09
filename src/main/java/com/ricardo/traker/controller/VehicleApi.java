@@ -22,14 +22,14 @@ public interface VehicleApi {
     ResponseEntity<VehicleResponseDto> registerVehicle(@RequestBody @Valid VehicleRequestDto vehicleRequestDto) throws ServiceException;
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.GET)
-    ResponseEntity<VehicleResponseDto> getVehicle(@PathVariable Integer vehicleId);
+    ResponseEntity<VehicleResponseDto> getVehicle(@PathVariable Long vehicleId);
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.PUT)
-    ResponseEntity<VehicleResponseDto> editVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleRequestDto vehicleRequestDto);
+    ResponseEntity<VehicleResponseDto> editVehicle(@PathVariable Long vehicleId, @RequestBody VehicleRequestDto vehicleRequestDto);
 
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.DELETE)
-    ResponseEntity<VehicleResponseDto> removeVehicle(@PathVariable Integer vehicleId);
+    ResponseEntity<VehicleResponseDto> removeVehicle(@PathVariable Long vehicleId);
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     ResponseEntity<ListResponse<VehicleResponseDto>> getUserVehicles(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,

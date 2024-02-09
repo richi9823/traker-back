@@ -44,7 +44,7 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<AlertResponseDto> editAlert(Integer alertId, AlertRequestDto alertRequestDto) {
+    public ResponseEntity<AlertResponseDto> editAlert(Long alertId, AlertRequestDto alertRequestDto) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -53,7 +53,7 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<AlertResponseDto> getAlert(Integer alertId) {
+    public ResponseEntity<AlertResponseDto> getAlert(Long alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -62,7 +62,7 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<?> removeAlert(Integer alertId) {
+    public ResponseEntity<?> removeAlert(Long alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         alertService.removeAlert(alertId);
@@ -70,7 +70,7 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(Integer vehicleId, Integer page, Integer size, String sort) {
+    public ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(Long vehicleId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok()

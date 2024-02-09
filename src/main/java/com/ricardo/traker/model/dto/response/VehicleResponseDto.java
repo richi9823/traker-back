@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 public class VehicleResponseDto {
@@ -13,13 +15,13 @@ public class VehicleResponseDto {
 
     private String license;
 
-    private GPSResponseDto gps;
+    private List<GPSResponseDto> gps;
 
     @JsonProperty("created_date")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @JsonProperty("modified_date")
-    private LocalDateTime modifiedDate;
+    private OffsetDateTime modifiedDate;
 
 
 }

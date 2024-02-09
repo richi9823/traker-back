@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1689018407304-1
+      id: 1707504043846-1
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -10,7 +10,7 @@ databaseChangeLog:
             sequenceName: alert_arrival_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-2
+      id: 1707504043846-2
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -20,7 +20,7 @@ databaseChangeLog:
             sequenceName: alert_distance_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-3
+      id: 1707504043846-3
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -30,7 +30,7 @@ databaseChangeLog:
             sequenceName: alert_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-4
+      id: 1707504043846-4
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -40,7 +40,7 @@ databaseChangeLog:
             sequenceName: alert_speed_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-5
+      id: 1707504043846-5
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -50,7 +50,17 @@ databaseChangeLog:
             sequenceName: notification_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-6
+      id: 1707504043846-6
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            schemaName: public
+            sequenceName: route_seq
+            startValue: 1
+  - changeSet:
+      id: 1707504043846-7
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -60,7 +70,7 @@ databaseChangeLog:
             sequenceName: user_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-7
+      id: 1707504043846-8
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -70,7 +80,7 @@ databaseChangeLog:
             sequenceName: vehicle_seq
             startValue: 1
   - changeSet:
-      id: 1689018407304-8
+      id: 1707504043846-9
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -87,10 +97,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   name: name
                   type: VARCHAR(255)
@@ -109,7 +122,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert
   - changeSet:
-      id: 1689018407304-9
+      id: 1707504043846-10
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -135,7 +148,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_arrival
   - changeSet:
-      id: 1689018407304-10
+      id: 1707504043846-11
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -162,7 +175,7 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_distance
   - changeSet:
-      id: 1689018407304-11
+      id: 1707504043846-12
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -183,7 +196,26 @@ databaseChangeLog:
             schemaName: public
             tableName: alert_speed
   - changeSet:
-      id: 1689018407304-12
+      id: 1707504043846-13
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: alert_id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: vehicle_id
+                  type: INT
+            schemaName: public
+            tableName: alert_vehicle
+  - changeSet:
+      id: 1707504043846-14
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -195,23 +227,26 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_gps_device
                   name: traccar_device_id
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   constraints:
                     nullable: false
                   name: register_device_id
-                  type: INT
+                  type: BIGINT
               - column:
                   name: last_updated
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: status
                   type: VARCHAR(255)
@@ -224,10 +259,13 @@ databaseChangeLog:
               - column:
                   name: motion
                   type: BOOLEAN
+              - column:
+                  name: vehicle_id
+                  type: INT
             schemaName: public
             tableName: gps_device
   - changeSet:
-      id: 1689018407304-13
+      id: 1707504043846-15
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -255,13 +293,10 @@ databaseChangeLog:
                     nullable: false
                   name: image_data
                   type: BLOB
-              - column:
-                  name: vehicle_id
-                  type: INT
             schemaName: public
             tableName: image
   - changeSet:
-      id: 1689018407304-14
+      id: 1707504043846-16
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -273,15 +308,18 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_notification
                   name: id
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   constraints:
                     nullable: false
@@ -295,7 +333,7 @@ databaseChangeLog:
             schemaName: public
             tableName: notification
   - changeSet:
-      id: 1689018407304-15
+      id: 1707504043846-17
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -305,16 +343,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: notification_id
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: positions_id
-                  type: INT
+                  name: position_id
+                  type: BIGINT
             schemaName: public
-            tableName: notification_positions
+            tableName: notifications_positions
   - changeSet:
-      id: 1689018407304-16
+      id: 1707504043846-18
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -326,18 +364,21 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_position
                   name: id
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   name: time
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: latitude
                   type: DECIMAL
@@ -353,15 +394,50 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: gps_id
-                  type: INT
-              - column:
-                  name: notification_id
-                  type: INT
+                  name: route_id
+                  type: BIGINT
             schemaName: public
             tableName: position
   - changeSet:
-      id: 1689018407304-17
+      id: 1707504043846-19
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_route
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_date
+                  type: timestamp
+              - column:
+                  name: modified_date
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start
+                  type: timestamp
+              - column:
+                  name: finish
+                  type: timestamp
+              - column:
+                  name: gps_traccar_device_id
+                  type: BIGINT
+            schemaName: public
+            tableName: route
+  - changeSet:
+      id: 1707504043846-20
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -373,15 +449,18 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_user
                   name: id
-                  type: INT
+                  type: BIGINT
               - column:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   constraints:
                     nullable: false
@@ -410,7 +489,7 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1689018407304-18
+      id: 1707504043846-21
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -427,10 +506,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: created_date
-                  type: DATETIME
+                  type: timestamp
               - column:
                   name: modified_date
-                  type: DATETIME
+                  type: timestamp
+              - column:
+                  name: deleted_at
+                  type: timestamp
               - column:
                   constraints:
                     nullable: false
@@ -442,19 +524,17 @@ databaseChangeLog:
                   name: license
                   type: VARCHAR(255)
               - column:
-                  constraints:
-                    nullable: false
-                  name: gps_id
-                  type: INT
+                  name: image_id
+                  type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
                   name: user_id
-                  type: INT
+                  type: BIGINT
             schemaName: public
             tableName: vehicle
   - changeSet:
-      id: 1689018407304-19
+      id: 1707504043846-22
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -464,17 +544,7 @@ databaseChangeLog:
             schemaName: public
             tableName: gps_device
   - changeSet:
-      id: 1689018407304-20
-      author: ricar (generated)
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: positions_id
-            constraintName: uc_notification_positions_positions
-            schemaName: public
-            tableName: notification_positions
-  - changeSet:
-      id: 1689018407304-21
+      id: 1707504043846-23
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -484,7 +554,7 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1689018407304-22
+      id: 1707504043846-24
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -494,7 +564,17 @@ databaseChangeLog:
             schemaName: public
             tableName: user
   - changeSet:
-      id: 1689018407304-23
+      id: 1707504043846-25
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: image_id
+            constraintName: uc_vehicle_image
+            schemaName: public
+            tableName: vehicle
+  - changeSet:
+      id: 1707504043846-26
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -504,7 +584,7 @@ databaseChangeLog:
             schemaName: public
             tableName: vehicle
   - changeSet:
-      id: 1689018407304-24
+      id: 1707504043846-27
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -517,7 +597,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-25
+      id: 1707504043846-28
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -530,7 +610,7 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-26
+      id: 1707504043846-29
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -543,7 +623,7 @@ databaseChangeLog:
             referencedTableName: vehicle
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-27
+      id: 1707504043846-30
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -556,20 +636,20 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-28
+      id: 1707504043846-31
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: vehicle_id
-            baseTableName: image
+            baseTableName: gps_device
             baseTableSchemaName: public
-            constraintName: FK_IMAGE_ON_VEHICLE
+            constraintName: FK_GPS_DEVICE_ON_VEHICLE
             referencedColumnNames: id
             referencedTableName: vehicle
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-29
+      id: 1707504043846-32
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -582,46 +662,46 @@ databaseChangeLog:
             referencedTableName: alert
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-30
+      id: 1707504043846-33
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: gps_id
+            baseColumnNames: route_id
             baseTableName: position
             baseTableSchemaName: public
-            constraintName: FK_POSITION_ON_GPS
+            constraintName: FK_POSITION_ON_ROUTE
+            referencedColumnNames: id
+            referencedTableName: route
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1707504043846-34
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gps_traccar_device_id
+            baseTableName: route
+            baseTableSchemaName: public
+            constraintName: FK_ROUTE_ON_GPS_TRACCAR_DEVICE
             referencedColumnNames: traccar_device_id
             referencedTableName: gps_device
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-31
+      id: 1707504043846-35
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: notification_id
-            baseTableName: position
-            baseTableSchemaName: public
-            constraintName: FK_POSITION_ON_NOTIFICATION
-            referencedColumnNames: id
-            referencedTableName: notification
-            referencedTableSchemaName: public
-  - changeSet:
-      id: 1689018407304-32
-      author: ricar (generated)
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: gps_id
+            baseColumnNames: image_id
             baseTableName: vehicle
             baseTableSchemaName: public
-            constraintName: FK_VEHICLE_ON_GPS
-            referencedColumnNames: traccar_device_id
-            referencedTableName: gps_device
+            constraintName: FK_VEHICLE_ON_IMAGE
+            referencedColumnNames: id
+            referencedTableName: image
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-33
+      id: 1707504043846-36
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -634,26 +714,52 @@ databaseChangeLog:
             referencedTableName: user
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-34
+      id: 1707504043846-37
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: alert_id
+            baseTableName: alert_vehicle
+            baseTableSchemaName: public
+            constraintName: fk_aleveh_on_alert_entity
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1707504043846-38
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: alert_vehicle
+            baseTableSchemaName: public
+            constraintName: fk_aleveh_on_vehicle_entity
+            referencedColumnNames: id
+            referencedTableName: vehicle
+            referencedTableSchemaName: public
+  - changeSet:
+      id: 1707504043846-39
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: notification_id
-            baseTableName: notification_positions
+            baseTableName: notifications_positions
             baseTableSchemaName: public
             constraintName: fk_notpos_on_notification_entity
             referencedColumnNames: id
             referencedTableName: notification
             referencedTableSchemaName: public
   - changeSet:
-      id: 1689018407304-35
+      id: 1707504043846-40
       author: ricar (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: positions_id
-            baseTableName: notification_positions
+            baseColumnNames: position_id
+            baseTableName: notifications_positions
             baseTableSchemaName: public
             constraintName: fk_notpos_on_position_entity
             referencedColumnNames: id

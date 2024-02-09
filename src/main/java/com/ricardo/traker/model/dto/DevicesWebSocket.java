@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class DevicesWebSocket {
 
-    private Integer id;
+    private Long id;
     private String name;
 
     private String uniqueId;

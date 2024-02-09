@@ -5,13 +5,14 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class PositionsResponseDto {
 
-    private Integer id;
+    private Long id;
 
-    private LocalDateTime time;
+    private OffsetDateTime time;
 
     private BigDecimal latitude;
 
@@ -22,5 +23,5 @@ public class PositionsResponseDto {
     private BigDecimal speed;
 
     @JsonProperty("created_date")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 }

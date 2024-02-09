@@ -32,7 +32,4 @@ public class ImageEntity {
     @Column(name = "image_data", length = 1000, nullable = false)
     private byte[] imageData;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id")
-    private VehicleEntity vehicleEntity;
 }

@@ -5,6 +5,8 @@ import lombok.*;
 
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -15,11 +17,13 @@ import java.util.List;
 @Entity(name = "notification")
 @SuperBuilder
 @NoArgsConstructor
-public class NotificationEntity extends SuperEntity{
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE notification SET deleted_at = now() WHERE id = ?")
+public class NotificationEntity extends SuperEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private boolean read;
@@ -28,6 +32,11 @@ public class NotificationEntity extends SuperEntity{
     @JoinColumn(name = "alert_id", nullable = false, updatable = false)
     private AlertEntity alert;
 
-    @OneToMany(mappedBy = "notification")
+    @JoinTable(
+            name = "notifications_positions",
+            joinColumns = @JoinColumn(name = "notification_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name="position_id", nullable = false)
+    )
+    @ManyToMany
     private List<PositionEntity> positions;
 }

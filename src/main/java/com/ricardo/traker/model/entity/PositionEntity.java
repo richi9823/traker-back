@@ -4,9 +4,13 @@ import lombok.*;
 
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,12 +19,14 @@ import java.time.LocalDateTime;
 @Entity(name = "position")
 @SuperBuilder
 @NoArgsConstructor
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE position SET deleted_at = now() WHERE id = ?")
 public class PositionEntity extends SuperEntity{
 
     @Id
-    private Integer id;
+    private Long id;
 
-    private LocalDateTime time;
+    private OffsetDateTime time;
 
     private BigDecimal latitude;
 
@@ -31,11 +37,10 @@ public class PositionEntity extends SuperEntity{
     private BigDecimal speed;
 
     @ManyToOne
-    @JoinColumn(name = "gps_id", nullable = false, updatable = false)
-    private GPSEntity gps;
+    @JoinColumn(name = "route_id", nullable = false, updatable = false)
+    private RouteEntity route;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_id")
-    private NotificationEntity notification;
+    @ManyToMany(mappedBy = "positions")
+    private List<NotificationEntity> notifications;
 
 }

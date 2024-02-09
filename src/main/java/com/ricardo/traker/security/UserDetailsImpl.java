@@ -64,7 +64,7 @@ public class UserDetailsImpl implements UserDetails {
         return user.getEmail();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return user.getId();
     }
 

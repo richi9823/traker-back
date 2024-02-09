@@ -31,13 +31,13 @@ public class NotificationController implements NotificationApi{
     }
 
     @Override
-    public ResponseEntity<?> readNotification(Integer notificationId) {
+    public ResponseEntity<?> readNotification(Long notificationId) {
         notificationService.readNotification(notificationId);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<NotificationResponseDto> getNotification(Integer notificationId) {
+    public ResponseEntity<NotificationResponseDto> getNotification(Long notificationId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
@@ -64,7 +64,7 @@ public class NotificationController implements NotificationApi{
     }
 
     @Override
-    public ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(Integer vehicleId, Integer page, Integer size, String sort) {
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(Long vehicleId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
@@ -73,7 +73,7 @@ public class NotificationController implements NotificationApi{
     }
 
     @Override
-    public ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(Integer alertId, Integer page, Integer size, String sort) {
+    public ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(Long alertId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(

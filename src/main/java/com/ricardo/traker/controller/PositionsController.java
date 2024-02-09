@@ -32,7 +32,7 @@ public class PositionsController implements PositionsApi{
         this.request = request;
     }
     @Override
-    public ResponseEntity<PositionsResponseDto> getVehiclePosition(Integer vehicleId) {
+    public ResponseEntity<PositionsResponseDto> getVehiclePosition(Long vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(
@@ -41,7 +41,7 @@ public class PositionsController implements PositionsApi{
     }
 
     @Override
-    public ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(Integer vehicleId, String since, IntervalEnum interval) {
+    public ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(Long vehicleId, String since, IntervalEnum interval) {
         return  ResponseEntity.ok(positionService.getRoutes(
                 vehicleId,
                 LocalDateTime.parse( Optional.ofNullable(since).orElse(LocalDateTime.now().toString())),

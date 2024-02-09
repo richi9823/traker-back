@@ -9,12 +9,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 import java.util.Optional;
 
-public interface VehicleRepository extends JpaRepository<VehicleEntity, Integer>, JpaSpecificationExecutor<VehicleEntity> {
+public interface VehicleRepository extends JpaRepository<VehicleEntity, Long>, JpaSpecificationExecutor<VehicleEntity> {
 
-    Optional<VehicleEntity> findByGps_TraccarDeviceId(Integer id);
+    Optional<VehicleEntity> findByGps_TraccarDeviceId(Long id);
 
-    static Specification<VehicleEntity> userIs(Integer userId){
+    static Specification<VehicleEntity> userIs(Long userId){
         return (root, query, criteriaBuilder)
                 ->  criteriaBuilder.equal(root.get("user").get("id"), userId);
     }
+
+    List<VehicleEntity> findByUser_Id(Long id);
 }

@@ -19,7 +19,7 @@ public class AlertRequestDto {
 
     @JsonProperty("vehicle_id")
     @NotNull
-    private Integer vehicleId;
+    private Long vehicleId;
 
     private AlertArrivalRequestDto arrival;
 

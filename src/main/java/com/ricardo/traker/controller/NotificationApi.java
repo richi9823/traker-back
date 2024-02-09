@@ -19,10 +19,10 @@ import java.util.List;
 public interface NotificationApi {
 
     @RequestMapping(value = "/{notificationId}", method = RequestMethod.PUT)
-    ResponseEntity<?> readNotification(@PathVariable Integer notificationId);
+    ResponseEntity<?> readNotification(@PathVariable Long notificationId);
 
     @RequestMapping(value = "/{notificationId}", method = RequestMethod.GET)
-    ResponseEntity<NotificationResponseDto> getNotification(@PathVariable Integer notificationId);
+    ResponseEntity<NotificationResponseDto> getNotification(@PathVariable Long notificationId);
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     ResponseEntity<ListResponse<NotificationResponseDto>> getNotifications(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
@@ -35,13 +35,13 @@ public interface NotificationApi {
                                                                           @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
 
     @RequestMapping(value = "/vehicle/{vehicleId}/notifications", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(@PathVariable Integer vehicleId,
+    ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(@PathVariable Long vehicleId,
                                                                           @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                           @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                                                                           @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
 
     @RequestMapping(value = "/alert/{alertId}/notifications", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(@PathVariable Integer alertId,
+    ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(@PathVariable Long alertId,
                                                                         @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                         @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                                                                         @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);

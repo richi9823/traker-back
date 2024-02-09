@@ -19,6 +19,6 @@ public class VehicleRequestDto {
 
     @NotNull
     @JsonProperty("device_register_id")
-    private Integer deviceRegisterId;
+    private Long deviceRegisterId;
 
 }

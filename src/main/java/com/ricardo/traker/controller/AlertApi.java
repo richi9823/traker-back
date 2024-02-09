@@ -19,16 +19,16 @@ public interface AlertApi {
 
 
     @RequestMapping(value = "/{alertId}", method = RequestMethod.PUT)
-    ResponseEntity<AlertResponseDto> editAlert(@PathVariable Integer alertId, @RequestBody AlertRequestDto vehicleRequestDto);
+    ResponseEntity<AlertResponseDto> editAlert(@PathVariable Long alertId, @RequestBody AlertRequestDto vehicleRequestDto);
 
     @RequestMapping(value = "/{alertId}", method = RequestMethod.GET)
-    ResponseEntity<AlertResponseDto> getAlert(@PathVariable Integer alertId);
+    ResponseEntity<AlertResponseDto> getAlert(@PathVariable Long alertId);
 
     @RequestMapping(value = "/{alertId}", method = RequestMethod.DELETE)
-    ResponseEntity<?> removeAlert(@PathVariable Integer alertId);
+    ResponseEntity<?> removeAlert(@PathVariable Long alertId);
 
     @RequestMapping(value = "/vehicle/{vehicleId}/alerts", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(@PathVariable Integer vehicleId,
+    ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(@PathVariable Long vehicleId,
                                                                     @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                     @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                                                                     @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);

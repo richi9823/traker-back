@@ -3,9 +3,12 @@ package com.ricardo.traker.model.entity;
 import lombok.*;
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -14,17 +17,19 @@ import java.time.LocalDateTime;
 @Entity(name = "gps_device")
 @SuperBuilder
 @NoArgsConstructor
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE gps_device SET deleted_at = now() WHERE id = ?")
 public class GPSEntity extends SuperEntity{
 
     @Id
     @Column(name="traccar_device_id")
-    private Integer traccarDeviceId;
+    private Long traccarDeviceId;
 
     @Column(name="register_device_id", unique = true, nullable = false)
-    private Integer registerDeviceId;
+    private Long registerDeviceId;
 
     @Column(name = "last_updated")
-    private LocalDateTime lastUpdated;
+    private OffsetDateTime lastUpdated;
 
     private String status;
 
@@ -36,7 +41,7 @@ public class GPSEntity extends SuperEntity{
 
     private Boolean motion;
 
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private VehicleEntity vehicle;
 

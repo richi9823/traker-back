@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface PositionRepository extends JpaRepository<PositionEntity, Integer>, JpaSpecificationExecutor<PositionEntity> {
+public interface PositionRepository extends JpaRepository<PositionEntity, Long>, JpaSpecificationExecutor<PositionEntity> {
 
-    List<PositionEntity> findByGps_TraccarDeviceIdOrderByTimeDesc(Integer gpsId);
+    void deleteByRoute_id(long routeId);
 
-    static Specification<PositionEntity> hasVehicle(Integer vehicleId) {
+    static Specification<PositionEntity> hasVehicle(Long vehicleId) {
         return (position, query, criteriaBuilder) -> criteriaBuilder.equal(position.get("gps").get("vehicle").get("id"), vehicleId);
     }
 

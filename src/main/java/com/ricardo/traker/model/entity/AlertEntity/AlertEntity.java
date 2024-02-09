@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ import java.util.List;
 @Table(name = "alert", schema = "public")
 @Entity(name = "alert")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE alert SET deleted_at = now() WHERE id = ?")
 public class AlertEntity extends SuperEntity {
 
     @Id
@@ -39,8 +43,14 @@ public class AlertEntity extends SuperEntity {
     @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
     private VehicleEntity vehicle;
 
-    @OneToMany(mappedBy = "alert", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "alert")
     private List<NotificationEntity> notifications;
 
-
+    @JoinTable(
+            name = "alert_vehicle",
+            joinColumns = @JoinColumn(name = "alert_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name="vehicle_id", nullable = false)
+    )
+    @ManyToMany
+    List<VehicleEntity> vehicles;
 }

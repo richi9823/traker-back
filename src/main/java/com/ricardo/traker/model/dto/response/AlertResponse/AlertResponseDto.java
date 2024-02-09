@@ -5,11 +5,12 @@ import com.ricardo.traker.enums.TypeAlertEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class AlertResponseDto {
 
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -18,7 +19,7 @@ public class AlertResponseDto {
     private TypeAlertEnum type;
 
     @JsonProperty("vehicle_id")
-    private Integer vehicleId;
+    private Long vehicleId;
 
     private AlertArrivalResponseDto arrival;
 
@@ -27,8 +28,8 @@ public class AlertResponseDto {
     private AlertSpeedResponseDto speed;
 
     @JsonProperty("created_date")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @JsonProperty("modified_date")
-    private LocalDateTime modifiedDate;
+    private OffsetDateTime modifiedDate;
 }

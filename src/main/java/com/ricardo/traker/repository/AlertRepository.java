@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface AlertRepository extends JpaRepository<AlertEntity, Integer>, JpaSpecificationExecutor<AlertEntity> {
+public interface AlertRepository extends JpaRepository<AlertEntity, Long>, JpaSpecificationExecutor<AlertEntity> {
 
-    List<AlertEntity> findByVehicle_Id(Integer vehicleId);
+    List<AlertEntity> findByVehicle_Id(Long vehicleId);
 
-    static Specification<AlertEntity> vehicleIs(Integer vehicleId){
+    static Specification<AlertEntity> vehicleIs(Long vehicleId){
         return (root, query, criteriaBuilder)
                 ->  criteriaBuilder.equal(root.get("vehicle").get("id"), vehicleId);
     }

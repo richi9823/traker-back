@@ -5,18 +5,19 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class GPSResponseDto {
 
     @JsonProperty("traccar_device_id")
-    private Integer traccarDeviceId;
+    private Long traccarDeviceId;
 
     @JsonProperty("register_device_id")
-    private Integer registerDeviceId;
+    private Long registerDeviceId;
 
     @JsonProperty("last_updated")
-    private LocalDateTime lastUpdated;
+    private OffsetDateTime lastUpdated;
 
     private String status;
 
