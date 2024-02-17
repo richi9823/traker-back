@@ -5,6 +5,8 @@ import com.ricardo.traker.enums.TypeAlertEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.Set;
+
 
 @Data
 public class AlertRequestDto {
@@ -17,9 +19,7 @@ public class AlertRequestDto {
     @NotNull
     private TypeAlertEnum type;
 
-    @JsonProperty("vehicle_id")
-    @NotNull
-    private Long vehicleId;
+    private Set<Long> vehicles;
 
     private AlertArrivalRequestDto arrival;
 

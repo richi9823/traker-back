@@ -1,6 +1,7 @@
 package com.ricardo.traker.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ricardo.traker.enums.GPSStatusEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -16,10 +17,12 @@ public class GPSResponseDto {
     @JsonProperty("register_device_id")
     private Long registerDeviceId;
 
+    private String name;
+
     @JsonProperty("last_updated")
     private OffsetDateTime lastUpdated;
 
-    private String status;
+    private GPSStatusEnum status;
 
     @JsonProperty("total_distance")
     private BigDecimal totalDistance;

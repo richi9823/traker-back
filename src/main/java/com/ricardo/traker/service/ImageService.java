@@ -18,13 +18,17 @@ public class ImageService {
     private ImageRepository imageRepository;
 
 
-    public void uploadImage(MultipartFile file) throws IOException {
+    public ImageEntity uploadImage(MultipartFile file) throws IOException {
 
-        imageRepository.save(ImageEntity.builder()
+        return imageRepository.save(ImageEntity.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imageData(ImageUtil.compressImage(file.getBytes())).build());
 
+    }
+
+    public void deleteImage(String id){
+        imageRepository.deleteById(id);
     }
 
 

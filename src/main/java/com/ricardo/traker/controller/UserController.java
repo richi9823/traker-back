@@ -1,36 +1,30 @@
 package com.ricardo.traker.controller;
 
-import com.ricardo.traker.exception.UserException;
-import com.ricardo.traker.model.dto.request.UserRequestDto;
-import com.ricardo.traker.model.dto.response.UserResponseDto;
-import com.ricardo.traker.security.AuthCredentials;
+import com.ricardo.traker.mapper.UserMapper;
+import com.ricardo.traker.model.dto.request.UserEditRequestDto;
+import com.ricardo.traker.model.dto.response.UserDetailResponseDto;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
 import com.ricardo.traker.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class UserController implements UserApi{
 
     @Autowired
+    TokenUtils tokenUtils;
+
+    @Autowired
     UserService userService;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    UserMapper userMapper;
 
-    @Autowired
-    TokenUtils tokenUtils;
 
     private final HttpServletRequest request;
 
@@ -38,50 +32,27 @@ public class UserController implements UserApi{
     public UserController(HttpServletRequest request){
         this.request = request;
     }
-
     @Override
-    public ResponseEntity<UserResponseDto> login(@Valid AuthCredentials authCredentials) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authCredentials.getNickname(), authCredentials.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenUtils.createToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authorization",
-                "Bearer " + jwt);
-
-        return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(new UserResponseDto(
-                userDetails.getId(),
-                userDetails.getFirstname(),
-                userDetails.getLastname(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                "Bearer " + jwt));
-    }
-
-    @Override
-    public ResponseEntity<UserResponseDto> signup(@Valid UserRequestDto userRequestDto) throws UserException {
-        return ResponseEntity.ok()
-                .body(userService.createUser(userRequestDto));
-    }
-
-    @Override
-    public ResponseEntity<UserResponseDto> session() {
+    public ResponseEntity<UserDetailResponseDto> getUserDetails() {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok()
-                .body(new UserResponseDto(
-                        userDetails.getId(),
-                        userDetails.getFirstname(),
-                        userDetails.getLastname(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        request.getHeader("Authorization")));
+        return ResponseEntity.ok().body(userMapper.mapUserEntityToUserDetailResponseDto(
+                userService.getUserEntity(userDetails.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + userDetails.getId() + "Not found")))
+        );
     }
 
+    @Override
+    public ResponseEntity<UserDetailResponseDto> editUser(UserEditRequestDto userEditRequestDto) {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok().body(userService.editUser(userDetails.getId(), userEditRequestDto));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteUser() {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        userService.deleteById(userDetails.getId());
+        return ResponseEntity.ok().build();
+    }
 }

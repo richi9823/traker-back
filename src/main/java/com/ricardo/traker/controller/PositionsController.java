@@ -1,8 +1,6 @@
 package com.ricardo.traker.controller;
 
-import com.ricardo.traker.enums.IntervalEnum;
 import com.ricardo.traker.model.dto.response.PositionsResponseDto;
-import com.ricardo.traker.model.dto.response.RoutesResponseDto;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
 import com.ricardo.traker.service.PositionService;
@@ -11,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class PositionsController implements PositionsApi{
@@ -40,11 +34,5 @@ public class PositionsController implements PositionsApi{
         );
     }
 
-    @Override
-    public ResponseEntity<List<RoutesResponseDto>> getVehicleRoutes(Long vehicleId, String since, IntervalEnum interval) {
-        return  ResponseEntity.ok(positionService.getRoutes(
-                vehicleId,
-                LocalDateTime.parse( Optional.ofNullable(since).orElse(LocalDateTime.now().toString())),
-                Optional.ofNullable(interval).orElse(IntervalEnum._3H)));
-    }
+
 }

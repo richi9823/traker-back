@@ -39,10 +39,6 @@ public class AlertEntity extends SuperEntity {
     @Enumerated(EnumType.STRING)
     private TypeAlertEnum type;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
-    private VehicleEntity vehicle;
-
     @OneToMany(mappedBy = "alert")
     private List<NotificationEntity> notifications;
 

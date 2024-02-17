@@ -2,10 +2,13 @@ package com.ricardo.traker.model.dto.response.AlertResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ricardo.traker.enums.TypeAlertEnum;
+import com.ricardo.traker.model.dto.response.NotificationShortResponseDto;
+import com.ricardo.traker.model.dto.response.VehicleShortResponseDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Data
 public class AlertResponseDto {
@@ -18,8 +21,7 @@ public class AlertResponseDto {
 
     private TypeAlertEnum type;
 
-    @JsonProperty("vehicle_id")
-    private Long vehicleId;
+    private Set<VehicleShortResponseDto> vehicles;
 
     private AlertArrivalResponseDto arrival;
 

@@ -1,5 +1,6 @@
 package com.ricardo.traker.model.entity;
 
+import com.ricardo.traker.enums.GPSStatusEnum;
 import lombok.*;
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
@@ -31,7 +32,12 @@ public class GPSEntity extends SuperEntity{
     @Column(name = "last_updated")
     private OffsetDateTime lastUpdated;
 
-    private String status;
+    private String name;
+
+    private GPSStatusEnum status;
+
+    @Column(name = "traccar_status")
+    private String traccarStatus;
 
     @Column(name = "total_distance")
     private BigDecimal totalDistance;

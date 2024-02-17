@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 
 @Data
@@ -17,8 +20,8 @@ public class VehicleRequestDto {
     @NotBlank
     private String license;
 
-    @NotNull
-    @JsonProperty("device_register_id")
-    private Long deviceRegisterId;
+    private String description;
+
+    private Optional<GPSDeviceRequestDto> deviceRequestDto;
 
 }

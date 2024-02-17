@@ -3,6 +3,7 @@ package com.ricardo.traker.controller;
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.AlertResponse.AlertShortResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
@@ -70,10 +71,10 @@ public class AlertController implements AlertApi{
     }
 
     @Override
-    public ResponseEntity<ListResponse<AlertResponseDto>> getVehicleAlerts(Long vehicleId, Integer page, Integer size, String sort) {
+    public ResponseEntity<ListResponse<AlertShortResponseDto>> getAlerts( Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok()
-                .body(alertService.getVehicleAlerts(vehicleId, page, size, sort));
+                .body(alertService.getAlerts( page, size, sort));
     }
 }

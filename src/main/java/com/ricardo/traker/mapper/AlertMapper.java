@@ -2,10 +2,7 @@ package com.ricardo.traker.mapper;
 
 import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
-import com.ricardo.traker.model.dto.response.AlertResponse.AlertArrivalResponseDto;
-import com.ricardo.traker.model.dto.response.AlertResponse.AlertDistanceResponseDto;
-import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
-import com.ricardo.traker.model.dto.response.AlertResponse.AlertSpeedResponseDto;
+import com.ricardo.traker.model.dto.response.AlertResponse.*;
 import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
@@ -13,7 +10,7 @@ import com.ricardo.traker.model.entity.AlertEntity.AlertSpeedEntity;
 
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {VehicleMapper.class})
 public abstract class AlertMapper {
 
     @Mapping(target = "latitude", source = "arrival.latitude")
@@ -52,8 +49,9 @@ public abstract class AlertMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract  AlertSpeedEntity mapAlertRequestDtoToAlertSpeedEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertSpeedEntity alertEntity);
 
-    @Mapping(target = "vehicleId", source = "vehicle.id")
     public  abstract  AlertResponseDto mapAlertEntityToAlertResponseDto(AlertEntity alertEntity);
+
+    public  abstract AlertShortResponseDto mapAlertEntityToAlertShortResponseDto(AlertEntity alertEntity);
 
     @AfterMapping
     AlertResponseDto mapAlertEntityToAlertResponseDto(AlertEntity alertEntity, @MappingTarget AlertResponseDto alertResponseDto) {

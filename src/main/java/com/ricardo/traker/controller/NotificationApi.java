@@ -4,6 +4,7 @@ import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.NotificationResponseDto;
+import com.ricardo.traker.model.dto.response.NotificationShortResponseDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,25 +26,12 @@ public interface NotificationApi {
     ResponseEntity<NotificationResponseDto> getNotification(@PathVariable Long notificationId);
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getNotifications(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                           @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                           @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
+    ResponseEntity<ListResponse<NotificationShortResponseDto>> getNotifications(@RequestParam(required = false) Long vehicleId,
+                                                                                @RequestParam(required = false) Long alertId,
+                                                                                @RequestParam(required = false) Boolean readed,
+                                                                                @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                                @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
+                                                                                @RequestParam(value = "sort", required = false, defaultValue = "readed") String sort);
 
-    @RequestMapping(value = "/pending", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getPendingNotifications(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                          @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                          @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
-
-    @RequestMapping(value = "/vehicle/{vehicleId}/notifications", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getVehicleNotifications(@PathVariable Long vehicleId,
-                                                                          @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                          @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                          @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
-
-    @RequestMapping(value = "/alert/{alertId}/notifications", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<NotificationResponseDto>> getAlertNotifications(@PathVariable Long alertId,
-                                                                        @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                        @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                        @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
 
 }

@@ -3,6 +3,7 @@ package com.ricardo.traker.service;
 import com.ricardo.traker.mapper.NotificationMapper;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.NotificationResponseDto;
+import com.ricardo.traker.model.dto.response.NotificationShortResponseDto;
 import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
 import com.ricardo.traker.model.entity.NotificationEntity;
 import com.ricardo.traker.model.entity.PositionEntity;
@@ -51,54 +52,15 @@ public class NotificationService {
     }
 
 
-    public ListResponse<NotificationResponseDto> getNotifications(Long userId, Integer page, Integer size, String sort) {
-        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.userIs(userId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
-        ListResponse<NotificationResponseDto> response = new ListResponse<>();
-        response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationResponseDto)
+    public ListResponse<NotificationShortResponseDto> getNotifications(Long userId, Long vehicleId, Long alertId, Boolean readed, Integer page, Integer size, String sort) {
+        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.userIs(userId)).and(NotificationRepository.vehicleIs(vehicleId)).and(NotificationRepository.alertIs(alertId)).and(NotificationRepository.readIs(readed)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+        ListResponse<NotificationShortResponseDto> response = new ListResponse<>();
+        response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationShortResponseDto)
                 .collect(Collectors.toList()));
         response.setTotal(result.getTotalElements());
-
         return response;
     }
 
 
-    public ListResponse<NotificationResponseDto> getVehicleNotifications(Long vehicleId, Integer page, Integer size, String sort) {
-        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.vehicleIs(vehicleId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
-        ListResponse<NotificationResponseDto> response = new ListResponse<>();
-        response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationResponseDto)
-                .collect(Collectors.toList()));
-        response.setTotal(result.getTotalElements());
 
-        return response;
-    }
-
-
-    public ListResponse<NotificationResponseDto> getAlertNotifications(Long alertId, Integer page, Integer size, String sort) {
-        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.alertIs(alertId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
-        ListResponse<NotificationResponseDto> response = new ListResponse<>();
-        response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationResponseDto)
-                .collect(Collectors.toList()));
-        response.setTotal(result.getTotalElements());
-
-        return response;
-    }
-
-
-    public ListResponse<NotificationResponseDto> getPendingNotifications(Long userId, Integer page, Integer size, String sort) {
-        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.userIs(userId)).and(NotificationRepository.readIs(true)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
-        ListResponse<NotificationResponseDto> response = new ListResponse<>();
-        response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationResponseDto)
-                .collect(Collectors.toList()));
-        response.setTotal(result.getTotalElements());
-
-        return response;
-    }
-
-    public void deleteByAlertId(long id){
-        notificationRepository.deleteByAlert_Id(id);
-    }
-
-    public void deleteById(long id){
-        notificationRepository.deleteById(id);
-    }
 }

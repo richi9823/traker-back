@@ -2,13 +2,17 @@ package com.ricardo.traker.service;
 
 import com.ricardo.traker.exception.UserException;
 import com.ricardo.traker.mapper.UserMapper;
+import com.ricardo.traker.model.dto.request.UserEditRequestDto;
 import com.ricardo.traker.model.dto.request.UserRequestDto;
+import com.ricardo.traker.model.dto.response.UserDetailResponseDto;
 import com.ricardo.traker.model.dto.response.UserResponseDto;
 import com.ricardo.traker.model.entity.UserEntity;
 import com.ricardo.traker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -65,8 +69,23 @@ public class UserService {
     }
 
 
-    void deleteById(long id){
+    public void deleteById(long id){
         vehicleService.deleteByUserId(id);
         userRepository.deleteById(id);
+    }
+
+    public UserDetailResponseDto editUser(Long id, UserEditRequestDto userEditRequestDto) {
+        var user = this.getUserEntity(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user = userMapper.updateUserEntity(userEditRequestDto, user);
+        userRepository.findOneByNickname(user.getNickname()).ifPresent( u ->{
+            if(!u.getId().equals(id)) throw new ResponseStatusException(HttpStatus.CONFLICT, "This already nickname exists - " + u.getNickname());
+        });
+
+        userRepository.findOneByEmail(user.getEmail()).ifPresent( u ->{
+            if(!u.getId().equals(id)) throw new ResponseStatusException(HttpStatus.CONFLICT, "This already email exists - " + u.getEmail());
+        });
+        userRepository.save(user);
+        return userMapper.mapUserEntityToUserDetailResponseDto(user);
+
     }
 }

@@ -12,27 +12,4 @@ import java.util.List;
 public interface PositionRepository extends JpaRepository<PositionEntity, Long>, JpaSpecificationExecutor<PositionEntity> {
 
     void deleteByRoute_id(long routeId);
-
-    static Specification<PositionEntity> hasVehicle(Long vehicleId) {
-        return (position, query, criteriaBuilder) -> criteriaBuilder.equal(position.get("gps").get("vehicle").get("id"), vehicleId);
-    }
-
-    static Specification<PositionEntity> hasInterval(LocalDateTime till, IntervalEnum intervalEnum) {
-        return (position, query, criteriaBuilder) -> {
-            LocalDateTime tillTime = till;
-            LocalDateTime sinceTime = tillTime;
-            switch (intervalEnum) {
-                case _30MIN -> sinceTime = tillTime.minusMinutes(30);
-                case _1H -> sinceTime = tillTime.minusHours(1);
-                case _3H -> sinceTime = tillTime.minusHours(3);
-                case _12H -> sinceTime = tillTime.minusHours(12);
-                case _24H_ -> sinceTime = tillTime.minusDays(1);
-                case _3D -> sinceTime = tillTime.minusDays(3);
-                case _1W -> sinceTime = tillTime.minusWeeks(1);
-                case _1M -> sinceTime = tillTime.minusMonths(1);
-                case _1Y -> sinceTime = tillTime.minusYears(1);
-            }
-            return criteriaBuilder.between(position.get("time"), sinceTime, tillTime);
-        };
-    }
 }

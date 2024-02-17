@@ -32,6 +32,9 @@ public class VehicleEntity extends SuperEntity {
     @Column(unique = true, nullable = false)
     private String license;
 
+    @Column()
+    private String description;
+
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "image_id")
     private ImageEntity image;

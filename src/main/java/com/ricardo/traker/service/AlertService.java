@@ -3,6 +3,7 @@ package com.ricardo.traker.service;
 import com.ricardo.traker.mapper.AlertMapper;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
+import com.ricardo.traker.model.dto.response.AlertResponse.AlertShortResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
 import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +39,9 @@ public class AlertService {
 
     @Autowired
     AlertRepository alertRepository;
+
+    @Autowired
+    VehicleService vehicleService;
 
     @Autowired
     AlertDistanceRepository alertDistanceRepository;
@@ -51,17 +56,19 @@ public class AlertService {
     AlertMapper alertMapper;
 
     @Autowired
-    NotificationService notificationService;
-
-    @Autowired
-    VehicleRepository vehicleRepository;
+    NotificationService notificationService;;
 
 
 
     public AlertResponseDto createAlert(AlertRequestDto alertRequestDto) {
-        VehicleEntity vehicleEntity = vehicleRepository.findById(alertRequestDto.getVehicleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle not found"));
+        List<VehicleEntity> vehicles = new ArrayList<>();
+        if(alertRequestDto.getVehicles() != null){
+            alertRequestDto.getVehicles().stream().forEach(id->
+                   vehicles.add(vehicleService.getVehicleEntity(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
+            );
+        }
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
-        alertEntity.setVehicle(vehicleEntity);
+        alertEntity.setVehicles(vehicles);
         this.save(alertEntity);
         return alertMapper.mapAlertEntityToAlertResponseDto(alertEntity);
     }
@@ -77,6 +84,14 @@ public class AlertService {
     public AlertResponseDto editAlert(Long alertId, AlertRequestDto alertRequestDto) {
 
         AlertEntity alertEntity = alertRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
+        List<VehicleEntity> vehicles = new ArrayList<>();
+        if(alertRequestDto.getVehicles() != null){
+            alertRequestDto.getVehicles().stream().forEach(id->
+                    vehicles.add(vehicleService.getVehicleEntity(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
+            );
+            alertEntity.setVehicles(vehicles);
+        }
+
         return switch (alertEntity.getType()){
             case ARRIVAL -> {
                 AlertArrivalEntity alertArrivalEntity = alertArrivalRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
@@ -106,15 +121,10 @@ public class AlertService {
     }
 
 
-    public List<AlertResponseDto> getVehicleAlerts(Long vehicleId) {
-        return alertRepository.findByVehicle_Id(vehicleId).stream().map(alertMapper::mapAlertEntityToAlertResponseDto).collect(Collectors.toList());
-    }
-
-
-    public ListResponse<AlertResponseDto> getVehicleAlerts(Long vehicleId, Integer page, Integer size, String sort) {
-        Page<AlertEntity> result = alertRepository.findAll(Specification.where(AlertRepository.vehicleIs(vehicleId)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
-        ListResponse<AlertResponseDto> response = new ListResponse<>();
-        response.setItems(result.get().map(alertMapper::mapAlertEntityToAlertResponseDto).collect(Collectors.toList()));
+    public ListResponse<AlertShortResponseDto> getAlerts( Integer page, Integer size, String sort) {
+        Page<AlertEntity> result = alertRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+        ListResponse<AlertShortResponseDto> response = new ListResponse<>();
+        response.setItems(result.get().map(alertMapper::mapAlertEntityToAlertShortResponseDto).collect(Collectors.toList()));
         response.setTotal(result.getTotalElements());
         return response;
     }
