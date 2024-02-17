@@ -25,9 +25,6 @@ public class VehicleResponseDto {
     @Builder.Default
     private List<GPSShortResponseDto> gps = new ArrayList<>();
 
-    @Builder.Default
-    private List<AlertShortResponseDto> alerts = new ArrayList<>();
-
     @JsonProperty("created_date")
     private OffsetDateTime createdDate;
 

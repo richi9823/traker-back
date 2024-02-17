@@ -41,7 +41,7 @@ public class AlertService {
     AlertRepository alertRepository;
 
     @Autowired
-    VehicleService vehicleService;
+    VehicleRepository vehicleRepository;
 
     @Autowired
     AlertDistanceRepository alertDistanceRepository;
@@ -64,7 +64,7 @@ public class AlertService {
         List<VehicleEntity> vehicles = new ArrayList<>();
         if(alertRequestDto.getVehicles() != null){
             alertRequestDto.getVehicles().stream().forEach(id->
-                   vehicles.add(vehicleService.getVehicleEntity(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
+                   vehicles.add(vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
             );
         }
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
@@ -87,7 +87,7 @@ public class AlertService {
         List<VehicleEntity> vehicles = new ArrayList<>();
         if(alertRequestDto.getVehicles() != null){
             alertRequestDto.getVehicles().stream().forEach(id->
-                    vehicles.add(vehicleService.getVehicleEntity(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
+                    vehicles.add(vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
             );
             alertEntity.setVehicles(vehicles);
         }

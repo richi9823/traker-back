@@ -11,12 +11,6 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long>, JpaSpecificationExecutor<NotificationEntity> {
 
-    List<NotificationEntity> findByAlert_Vehicle_User_Id(Long userId);
-
-    List<NotificationEntity> findByAlert_Vehicle_User_IdAndReadFalse(Long userId);
-
-    List<NotificationEntity> findByAlert_Vehicle_Id(Long vehicleId);
-
     List<NotificationEntity> findByAlert_Id(Long alertId);
 
 

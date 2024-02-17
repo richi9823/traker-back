@@ -14,5 +14,5 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Long> 
 
     void deleteByRoute_id(long routeId);
 
-    Optional<PositionEntity> findOneByVehicle_IdOrderByTimeDesc(Long vehicleId);
+    Optional<PositionEntity> findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(Long vehicleId);
 }

@@ -28,6 +28,6 @@ public interface GPSDeviceApi {
     @RequestMapping(value = "/{gpsId}", method = RequestMethod.GET)
     ResponseEntity<GPSResponseDto> getGPSDevice(@PathVariable Long gpsId);
 
-    @RequestMapping(value = "/vehicle/{vehicleId]", method = RequestMethod.POST)
+    @RequestMapping(value = "/vehicle/{vehicleId}", method = RequestMethod.POST)
     ResponseEntity<List<GPSShortResponseDto>> getListGPS(@PathVariable Long vehicleId);
 }

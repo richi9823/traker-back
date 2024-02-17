@@ -53,7 +53,7 @@ public class PositionService {
 
 
     public PositionsResponseDto getPosition(Long vehicleId) {
-        PositionEntity pos = positionRepository.findOneByVehicle_IdOrderByTimeDesc(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Last position not found"));
+        PositionEntity pos = positionRepository.findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Last position not found"));
         return  positionMapper.mapPositionEntityToPositionResponse(pos);
     }
 

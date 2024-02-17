@@ -8,6 +8,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface AlertRepository extends JpaRepository<AlertEntity, Long> {
-
-    List<AlertEntity> findByVehicle_Id(Long vehicleId);
 }

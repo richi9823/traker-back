@@ -6,7 +6,7 @@ import com.ricardo.traker.model.dto.response.VehicleShortResponseDto;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = {GPSDeviceMapper.class, AlertMapper.class})
+@Mapper(componentModel = "spring", uses = {GPSDeviceMapper.class})
 public interface VehicleMapper {
 
     VehicleEntity mapVehicleRequestToVehicleEntity(VehicleRequestDto vehicleRequestDto);
