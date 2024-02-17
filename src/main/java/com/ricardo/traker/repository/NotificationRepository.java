@@ -19,7 +19,6 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 
     List<NotificationEntity> findByAlert_Id(Long alertId);
 
-    void deleteByAlert_Id(Long alertId);
 
     static Specification<NotificationEntity> userIs(Long userId){
         return (root, query, criteriaBuilder)

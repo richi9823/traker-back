@@ -8,8 +8,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-public interface PositionRepository extends JpaRepository<PositionEntity, Long>, JpaSpecificationExecutor<PositionEntity> {
+public interface PositionRepository extends JpaRepository<PositionEntity, Long> {
 
     void deleteByRoute_id(long routeId);
+
+    Optional<PositionEntity> findOneByVehicle_IdOrderByTimeDesc(Long vehicleId);
 }

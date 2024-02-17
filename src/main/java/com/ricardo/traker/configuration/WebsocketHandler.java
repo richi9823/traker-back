@@ -22,6 +22,5 @@ public class WebsocketHandler {
 
     public void saveDeviceInfo(MessageWebSocket messageWebSocket) {
         gpsService.updateGPS(messageWebSocket);
-        gpsService.updateGPSByWebSocket(messageWebSocket);
     }
 }

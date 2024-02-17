@@ -9,10 +9,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface RouteRepository extends JpaRepository<RouteEntity, Long>, JpaSpecificationExecutor<RouteEntity> {
 
     List<RouteEntity> findByGps_TraccarDeviceId(long id);
+
+    Optional<RouteEntity> findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(long id);
 
     static Specification<RouteEntity> hasVehicle(Long vehicleId) {
         return (route, query, criteriaBuilder) -> criteriaBuilder.equal(route.get("gps").get("vehicle").get("id"), vehicleId);

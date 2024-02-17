@@ -2,13 +2,16 @@ package com.ricardo.traker.service;
 
 import com.ricardo.traker.enums.IntervalEnum;
 import com.ricardo.traker.model.dto.MessageWebSocket;
+import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.RouteResponseDto;
 import com.ricardo.traker.model.dto.response.RouteShortResponseDto;
 import com.ricardo.traker.mapper.*;
 import com.ricardo.traker.model.entity.GPSEntity;
+import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.RouteEntity;
 import com.ricardo.traker.repository.RouteRepository;
+import com.ricardo.traker.util.CompareDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +39,31 @@ public class RouteService {
     @Autowired
     RouteMapper routeMapper;
 
-    public void updateRoutes(MessageWebSocket message, GPSEntity gps){
-        positionService.updatePositions(message, gps);
+    public void updateRoutes(PositionsWebSocket position, GPSEntity gps){
+        if(!positionService.positionExistById(position.getId())){
+            Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getRegisterDeviceId());
+            lastRoute.ifPresentOrElse( r ->{
+                Optional<PositionEntity> lastPosition = r.getPositions().stream().reduce(CompareDate::maxPosition);
+                lastPosition.ifPresent(p->{
+                    if(p.getTime().plusMinutes(30L).isBefore(position.getServerTime().toInstant().atOffset(ZoneOffset.UTC))){
+                        positionService.updatePositions(position, this.createRoute(gps));
+                    }else{
+                        positionService.updatePositions(position, r);
+                    }
+                });
+            }, () ->  positionService.updatePositions(position, this.createRoute(gps)));
+        }
+
+
+    }
+
+    private RouteEntity createRoute(GPSEntity gps){
+        return routeRepository.save(
+                RouteEntity.builder()
+                        .start(OffsetDateTime.now())
+                        .gps(gps)
+                        .build()
+        );
     }
 
     public void deleteByGpsId(long id){

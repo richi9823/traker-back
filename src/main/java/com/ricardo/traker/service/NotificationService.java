@@ -61,6 +61,17 @@ public class NotificationService {
         return response;
     }
 
+    public void deleteByAlertId(long id){
+        var notifications = notificationRepository.findByAlert_Id(id);
+        for(var n: notifications){
+            this.deleteById(n.getId());
+        }
+    }
+
+    public void deleteById(Long id){
+        notificationRepository.deleteById(id);
+    }
+
 
 
 }

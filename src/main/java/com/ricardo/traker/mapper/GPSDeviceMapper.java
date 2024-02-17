@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface GPSMapper {
+public interface GPSDeviceMapper {
 
     @Mapping(target = "registerDeviceId", source = "uniqueId")
     @Mapping(target = "traccarDeviceId", source = "id")

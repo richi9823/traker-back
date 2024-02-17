@@ -2,9 +2,11 @@ package com.ricardo.traker.service;
 
 import com.ricardo.traker.mapper.PositionMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
+import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.response.PositionsResponseDto;
 import com.ricardo.traker.model.entity.GPSEntity;
 import com.ricardo.traker.model.entity.PositionEntity;
+import com.ricardo.traker.model.entity.RouteEntity;
 import com.ricardo.traker.repository.PositionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,34 +31,30 @@ public class PositionService {
     AlertService alertService;
 
 
-    public void updatePositions(MessageWebSocket message, GPSEntity g) {
-       message.getPositions().stream().forEach(p -> {
-           if(!positionRepository.existsById(p.getId())){
-                   PositionEntity positionEntity = positionMapper.mapPositionWebSocketToPositionEntity(p);
-                   //positionEntity.setGps(g);
-                   alertService.checkAlerts(positionEntity);
-                   positionRepository.save(positionEntity);
-                   log.info("Positions updated - device: "
-                           + p.getDeviceId() + " latitude: "
-                           + p.getLatitude() + " longitude "
-                           + p.getLongitude() + " speed: "
-                           + p.getSpeed() + " date: "
-                           + p.getServerTime());
+    public PositionEntity updatePositions(PositionsWebSocket position, RouteEntity route) {
 
-           }
-       });
+       PositionEntity positionEntity = positionMapper.mapPositionWebSocketToPositionEntity(position);
+       positionEntity.setRoute(route);
+       alertService.checkAlerts(positionEntity);
 
+        log.info("Positions updated - device: "
+                + position.getDeviceId() + " latitude: "
+                + position.getLatitude() + " longitude "
+                + position.getLongitude() + " speed: "
+                + position.getSpeed() + " date: "
+                + position.getServerTime());
+       return positionRepository.save(positionEntity);
+
+    }
+
+    public boolean positionExistById(Long id){
+        return positionRepository.existsById(id);
     }
 
 
     public PositionsResponseDto getPosition(Long vehicleId) {
-        Specification<PositionEntity> specification = Specification.where(PositionRepository.hasVehicle(vehicleId));
-        List<PositionEntity> list = positionRepository.findAll(specification, Sort.by(Sort.Direction.DESC, "time"));
-        if(list.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not has positions");
-        }else{
-            return  positionMapper.mapPositionEntityToPositionResponse(list.get(0));
-        }
+        PositionEntity pos = positionRepository.findOneByVehicle_IdOrderByTimeDesc(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Last position not found"));
+        return  positionMapper.mapPositionEntityToPositionResponse(pos);
     }
 
 

@@ -2,7 +2,7 @@ package com.ricardo.traker.service;
 
 import com.ricardo.traker.enums.GPSStatusEnum;
 import com.ricardo.traker.exception.ServiceException;
-import com.ricardo.traker.mapper.GPSMapper;
+import com.ricardo.traker.mapper.GPSDeviceMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
@@ -38,7 +38,7 @@ public class GPSService {
     DevicesApi devicesApi;
 
     @Autowired
-    GPSMapper gpsMapper;
+    GPSDeviceMapper gpsMapper;
 
     @Autowired
     GPSRepository gpsRepository;
@@ -74,19 +74,6 @@ public class GPSService {
         return gpsRepository.findByVehicle_Id(vehicleId).stream().map(gpsMapper::mapEntityToShortResponse).collect(Collectors.toList());
     }
 
-    public void updateGPSByWebSocket(MessageWebSocket message) {
-        if(message.getDevices() != null){
-            message.getDevices().stream().forEach(d -> {
-                gpsRepository.findById(d.getId()).ifPresent(g -> {
-                    g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
-                    g.setTraccarStatus(d.getStatus());
-                    gpsRepository.save(g);
-                    log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
-                });
-            });
-        }
-    }
-
 
     public void updateGPS(MessageWebSocket message) {
         if(message.getPositions() != null) {
@@ -98,12 +85,22 @@ public class GPSService {
                         g.setMotion(position.getAttributes().getMotion());
                         gpsRepository.save(g);
                         log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
-                        routeService.updateRoutes(message, g);
+                        routeService.updateRoutes(position, g);
                     });
                 }
             });
-
         }
+        if(message.getDevices() != null){
+            message.getDevices().stream().forEach(d -> {
+                gpsRepository.findById(d.getId()).ifPresent(g -> {
+                    g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
+                    g.setTraccarStatus(d.getStatus());
+                    gpsRepository.save(g);
+                    log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
+                });
+            });
+        }
+
     }
 
     public void deleteByVehicleId(long id){
