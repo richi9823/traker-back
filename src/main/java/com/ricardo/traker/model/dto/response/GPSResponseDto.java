@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 public class GPSResponseDto {
 
     @JsonProperty("traccar_device_id")
-    private Long traccarDeviceId;
+    private Long id;
 
     @JsonProperty("register_device_id")
     private Long registerDeviceId;

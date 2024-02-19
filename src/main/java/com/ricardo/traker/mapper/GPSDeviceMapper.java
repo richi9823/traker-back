@@ -16,8 +16,10 @@ public interface GPSDeviceMapper {
     @Mapping(target = "status", ignore = true)
     GPSEntity mapDeviceToGpsEntity(Device device);
 
+    @Mapping(target = "id", source = "traccarDeviceId")
     GPSResponseDto mapEntityToResponse(GPSEntity gpsEntity);
 
+    @Mapping(target = "id", source = "traccarDeviceId")
     GPSShortResponseDto mapEntityToShortResponse(GPSEntity gpsEntity);
 
 

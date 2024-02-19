@@ -4,6 +4,7 @@ import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 
+import com.ricardo.traker.model.dto.response.GPSResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 
@@ -47,5 +48,5 @@ public interface VehicleApi {
 
 
     @RequestMapping(value = "/{vehicleId}/device", method = RequestMethod.POST)
-    ResponseEntity<VehicleResponseDto> addGPSDevice(@PathVariable Long vehicleId, @Valid GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException;
+    ResponseEntity<GPSResponseDto> addGPSDevice(@PathVariable Long vehicleId, @Valid @RequestBody GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException;
 }

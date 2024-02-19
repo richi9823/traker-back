@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class GPSShortResponseDto {
 
+    private Long id;
+
     @JsonProperty("register_device_id")
     private Long registerDeviceId;
 

@@ -19,8 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -39,14 +41,17 @@ public class RouteService {
     @Autowired
     RouteMapper routeMapper;
 
+    @Transactional
     public void updateRoutes(PositionsWebSocket position, GPSEntity gps){
-        if(!positionService.positionExistById(position.getId())){
+        if(!positionService.positionExistById(position.getId()) && (gps.getMotion() || gps.getActualDistance().compareTo(BigDecimal.valueOf(20L)) > 0)){
             Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getTraccarDeviceId());
             lastRoute.ifPresentOrElse( r ->{
                 if(r.getPositions() != null){
                     Optional<PositionEntity> lastPosition = r.getPositions().stream().reduce(CompareDate::maxPosition);
                     lastPosition.ifPresent(p->{
                         if(p.getTime().plusMinutes(30L).isBefore(position.getServerTime().toInstant().atOffset(ZoneOffset.UTC))){
+                            r.setFinish(p.getTime());
+                            routeRepository.save(r);
                             positionService.updatePositions(position, this.createRoute(gps));
                         }else{
                             positionService.updatePositions(position, r);

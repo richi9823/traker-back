@@ -3,6 +3,7 @@ package com.ricardo.traker.controller;
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
+import com.ricardo.traker.model.dto.response.GPSResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.dto.response.VehicleShortResponseDto;
@@ -98,7 +99,7 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> addGPSDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+    public ResponseEntity<GPSResponseDto> addGPSDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
         return ResponseEntity.ok()
                 .body(vehicleService.addGpsDevice(vehicleId, gpsDeviceRequestDto));
     }

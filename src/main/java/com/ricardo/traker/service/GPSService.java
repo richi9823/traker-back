@@ -80,12 +80,14 @@ public class GPSService {
             message.getPositions().forEach(position -> {
                 if (position.getAttributes() != null) {
                     gpsRepository.findById(position.getDeviceId()).ifPresent(g -> {
-                        g.setActualDistance(position.getAttributes().getDistance());
-                        g.setTotalDistance(position.getAttributes().getTotalDistance());
-                        g.setMotion(position.getAttributes().getMotion());
-                        gpsRepository.save(g);
-                        log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
-                        routeService.updateRoutes(position, g);
+                        if(g.getStatus().equals(GPSStatusEnum.ACTIVE)){
+                            g.setActualDistance(position.getAttributes().getDistance());
+                            g.setTotalDistance(position.getAttributes().getTotalDistance());
+                            g.setMotion(position.getAttributes().getMotion());
+                            gpsRepository.save(g);
+                            log.info("Gps updated - " + "device:" + position.getDeviceId() + " distance: " + position.getAttributes().getDistance());
+                            routeService.updateRoutes(position, g);
+                        }
                     });
                 }
             });
@@ -93,10 +95,12 @@ public class GPSService {
         if(message.getDevices() != null){
             message.getDevices().stream().forEach(d -> {
                 gpsRepository.findById(d.getId()).ifPresent(g -> {
-                    g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
-                    g.setTraccarStatus(d.getStatus());
-                    gpsRepository.save(g);
-                    log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
+                    if(g.getStatus().equals(GPSStatusEnum.ACTIVE)){
+                        g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
+                        g.setTraccarStatus(d.getStatus());
+                        gpsRepository.save(g);
+                        log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
+                    }
                 });
             });
         }
@@ -129,16 +133,27 @@ public class GPSService {
         var listGps = gpsRepository.findByVehicle_Id(gps.getVehicle().getId());
         listGps.stream().filter(g -> !g.getTraccarDeviceId().equals(gpsId)).forEach(
                 g->{
-                    g.setStatus(GPSStatusEnum.INACTIVE);
-                    gpsRepository.save(g);
+                    Device device = devicesApi.devicesGet(null,null,g.getTraccarDeviceId().intValue(),null).blockFirst();
+                    if(!device.getDisabled() || g.getStatus().equals(GPSStatusEnum.ACTIVE)){
+                        device.setDisabled(true);
+                        devicesApi.devicesIdPut(g.getTraccarDeviceId().intValue(), device).block();
+                        g.setStatus(GPSStatusEnum.INACTIVE);
+                        gpsRepository.save(g);
+                    }
                 }
         );
+        Device device = devicesApi.devicesGet(null,null,gpsId.intValue(),null).blockFirst();
+        device.disabled(false);
+        devicesApi.devicesIdPut(gpsId.intValue(), device).block();
         return gpsMapper.mapEntityToResponse(gpsRepository.save(gps));
     }
 
     private GPSResponseDto disableGPS(Long gpsId){
         var gps = gpsRepository.findById(gpsId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "GPS device not found - " + gpsId));
         gps.setStatus(GPSStatusEnum.INACTIVE);
+        Device device = devicesApi.devicesGet(null,null,gpsId.intValue(),null).blockFirst();
+        device.disabled(true);
+        devicesApi.devicesIdPut(gpsId.intValue(), device).block();
         return gpsMapper.mapEntityToResponse(gpsRepository.save(gps));
     }
 }

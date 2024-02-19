@@ -5,6 +5,7 @@ import com.ricardo.traker.mapper.GPSDeviceMapper;
 import com.ricardo.traker.mapper.VehicleMapper;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
+import com.ricardo.traker.model.dto.response.GPSResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.VehicleResponseDto;
 import com.ricardo.traker.model.dto.response.VehicleShortResponseDto;
@@ -152,11 +153,9 @@ public class VehicleService {
         vehicleRepository.deleteById(id);
     }
 
-    public VehicleResponseDto addGpsDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+    public GPSResponseDto addGpsDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
         VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
-        var response = vehicleMapper.mapVehicleEntityToVehicleResponseDto(vehicleEntity);
-        response.getGps().add(gpsMapper.mapResponseToShortResponse(gpsService.createGPS(vehicleEntity, gpsDeviceRequestDto)));
-        return response;
+        return gpsService.createGPS(vehicleEntity, gpsDeviceRequestDto);
     }
 
 
