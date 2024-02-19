@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +58,11 @@ public class VehicleService {
         var response = vehicleMapper.mapVehicleEntityToVehicleResponseDto(
                 vehicleEntity
         );
+        if(response.getGps() == null){
+            response.setGps(new ArrayList<>());
+        }
         if(vehicleRequestDto.getDeviceRequestDto().isPresent()){
+
             response.getGps().add(gpsMapper.mapResponseToShortResponse(gpsService.createGPS(vehicleEntity, vehicleRequestDto.getDeviceRequestDto().get())));
         }
         return response;

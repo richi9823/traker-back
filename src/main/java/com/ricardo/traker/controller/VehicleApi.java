@@ -23,7 +23,7 @@ public interface VehicleApi {
 
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    ResponseEntity<VehicleResponseDto> registerVehicle(@Valid VehicleRequestDto vehicleRequestDto) throws ServiceException;
+    ResponseEntity<VehicleResponseDto> registerVehicle(@Valid @RequestBody VehicleRequestDto vehicleRequestDto) throws ServiceException;
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.GET)
     ResponseEntity<VehicleResponseDto> getVehicle(@PathVariable Long vehicleId);

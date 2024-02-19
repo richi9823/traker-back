@@ -41,16 +41,21 @@ public class RouteService {
 
     public void updateRoutes(PositionsWebSocket position, GPSEntity gps){
         if(!positionService.positionExistById(position.getId())){
-            Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getRegisterDeviceId());
+            Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getTraccarDeviceId());
             lastRoute.ifPresentOrElse( r ->{
-                Optional<PositionEntity> lastPosition = r.getPositions().stream().reduce(CompareDate::maxPosition);
-                lastPosition.ifPresent(p->{
-                    if(p.getTime().plusMinutes(30L).isBefore(position.getServerTime().toInstant().atOffset(ZoneOffset.UTC))){
-                        positionService.updatePositions(position, this.createRoute(gps));
-                    }else{
-                        positionService.updatePositions(position, r);
-                    }
-                });
+                if(r.getPositions() != null){
+                    Optional<PositionEntity> lastPosition = r.getPositions().stream().reduce(CompareDate::maxPosition);
+                    lastPosition.ifPresent(p->{
+                        if(p.getTime().plusMinutes(30L).isBefore(position.getServerTime().toInstant().atOffset(ZoneOffset.UTC))){
+                            positionService.updatePositions(position, this.createRoute(gps));
+                        }else{
+                            positionService.updatePositions(position, r);
+                        }
+                    });
+                }else{
+                    positionService.updatePositions(position, r);
+                }
+
             }, () ->  positionService.updatePositions(position, this.createRoute(gps)));
         }
 

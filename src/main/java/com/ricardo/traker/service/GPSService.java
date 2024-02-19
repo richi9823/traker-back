@@ -59,7 +59,7 @@ public class GPSService {
             gpsEntity.setStatus(GPSStatusEnum.ACTIVE);
             gpsEntity.setVehicle(vehicle);
             gpsEntity = gpsRepository.save(gpsEntity);
-            return this.enableGPS(gpsEntity.getRegisterDeviceId());
+            return this.enableGPS(gpsEntity.getTraccarDeviceId());
         } catch (WebClientResponseException e) {
             throw new ServiceException("Exception creating device:" + e.getResponseBodyAsString(), e);
         }
@@ -126,7 +126,8 @@ public class GPSService {
     private GPSResponseDto enableGPS(Long gpsId){
         var gps = gpsRepository.findById(gpsId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "GPS device not found - " + gpsId));
         gps.setStatus(GPSStatusEnum.ACTIVE);
-        gps.getVehicle().getGps().stream().filter(g -> !g.getRegisterDeviceId().equals(gpsId)).forEach(
+        var listGps = gpsRepository.findByVehicle_Id(gps.getVehicle().getId());
+        listGps.stream().filter(g -> !g.getTraccarDeviceId().equals(gpsId)).forEach(
                 g->{
                     g.setStatus(GPSStatusEnum.INACTIVE);
                     gpsRepository.save(g);

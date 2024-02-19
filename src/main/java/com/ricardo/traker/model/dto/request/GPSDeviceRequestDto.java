@@ -8,9 +8,7 @@ import lombok.Data;
 public class GPSDeviceRequestDto {
 
     @JsonProperty("device_register_id")
-    @NotNull
     private Long deviceRegisterId;
 
-    @NotNull
     private String name;
 }

@@ -33,7 +33,7 @@ public class RouteEntity extends SuperEntity {
 
     private OffsetDateTime finish;
 
-    @OneToMany(mappedBy = "route")
+    @OneToMany(mappedBy = "route", fetch = FetchType.EAGER)
     private List<PositionEntity> positions;
 
     @ManyToOne

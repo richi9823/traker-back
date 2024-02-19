@@ -13,6 +13,7 @@ public interface GPSDeviceMapper {
     @Mapping(target = "registerDeviceId", source = "uniqueId")
     @Mapping(target = "traccarDeviceId", source = "id")
     @Mapping(target = "traccarStatus", source = "status")
+    @Mapping(target = "status", ignore = true)
     GPSEntity mapDeviceToGpsEntity(Device device);
 
     GPSResponseDto mapEntityToResponse(GPSEntity gpsEntity);
