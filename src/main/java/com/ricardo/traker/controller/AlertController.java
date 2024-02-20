@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -41,14 +42,15 @@ public class AlertController implements AlertApi{
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         return ResponseEntity.ok()
-                .body(alertService.createAlert(alertRequestDto));
+                .body(alertService.createAlert(userDetails.getId(), alertRequestDto));
     }
 
     @Override
     public ResponseEntity<AlertResponseDto> editAlert(Long alertId, AlertRequestDto alertRequestDto) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+        if(!alertService.getAlertEntity(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Alert_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(alertService.editAlert(alertId, alertRequestDto));
     }
@@ -56,8 +58,9 @@ public class AlertController implements AlertApi{
     @Override
     public ResponseEntity<AlertResponseDto> getAlert(Long alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+        if(!alertService.getAlertEntity(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Alert_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(alertService.getAlert(alertId));
     }
@@ -65,16 +68,18 @@ public class AlertController implements AlertApi{
     @Override
     public ResponseEntity<?> removeAlert(Long alertId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        alertService.removeAlert(alertId);
+        if(!alertService.getAlertEntity(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Alert_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        alertService.deleteById(alertId);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<ListResponse<AlertShortResponseDto>> getAlerts( Integer page, Integer size, String sort) {
+    public ResponseEntity<ListResponse<AlertShortResponseDto>> getAlerts(Long vehicleId, Integer page, Integer size, String sort) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok()
-                .body(alertService.getAlerts( page, size, sort));
+                .body(alertService.getAlerts(userDetails.getId(), vehicleId, page, size, sort));
     }
 }

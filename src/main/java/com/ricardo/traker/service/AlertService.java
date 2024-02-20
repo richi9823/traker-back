@@ -53,6 +53,9 @@ public class AlertService {
     AlertSpeedRepository alertSpeedRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     AlertMapper alertMapper;
 
     @Autowired
@@ -60,7 +63,7 @@ public class AlertService {
 
 
 
-    public AlertResponseDto createAlert(AlertRequestDto alertRequestDto) {
+    public AlertResponseDto createAlert(Long userId, AlertRequestDto alertRequestDto) {
         List<VehicleEntity> vehicles = new ArrayList<>();
         if(alertRequestDto.getVehicles() != null){
             alertRequestDto.getVehicles().stream().forEach(id->
@@ -68,6 +71,7 @@ public class AlertService {
             );
         }
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
+        alertEntity.setUser(userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         alertEntity.setVehicles(vehicles);
         this.save(alertEntity);
         return alertMapper.mapAlertEntityToAlertResponseDto(alertEntity);
@@ -116,13 +120,18 @@ public class AlertService {
     }
 
 
-    public void removeAlert(Long alertId) {
+    public void deleteById(Long alertId) {
+        notificationService.deleteByAlertId(alertId);
         alertRepository.deleteById(alertId);
     }
 
 
-    public ListResponse<AlertShortResponseDto> getAlerts( Integer page, Integer size, String sort) {
-        Page<AlertEntity> result = alertRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+    public ListResponse<AlertShortResponseDto> getAlerts(Long userId, Long vehicleId, Integer page, Integer size, String sort) {
+        Specification<AlertEntity> specification = Specification.where(AlertRepository.userIs(userId));
+        if(vehicleId != null){
+            specification = specification.and(AlertRepository.hasVehicle(vehicleId));
+        }
+        Page<AlertEntity> result = alertRepository.findAll(specification, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
         ListResponse<AlertShortResponseDto> response = new ListResponse<>();
         response.setItems(result.get().map(alertMapper::mapAlertEntityToAlertShortResponseDto).collect(Collectors.toList()));
         response.setTotal(result.getTotalElements());
@@ -221,8 +230,11 @@ public class AlertService {
         }
     }
 
-    void deleteById(long id){
-        notificationService.deleteByAlertId(id);
-        alertRepository.deleteById(id);
+    public void deleteByUserId(long id){
+        var alerList = alertRepository.findByUser_Id(id);
+        for(var alert : alerList){
+            this.deleteById(alert.getId());
+        }
     }
+
 }

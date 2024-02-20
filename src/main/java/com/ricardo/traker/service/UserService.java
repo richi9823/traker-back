@@ -34,6 +34,9 @@ public class UserService {
     @Autowired
     VehicleService vehicleService;
 
+    @Autowired
+    AlertService alertService;
+
 
     public UserResponseDto createUser(UserRequestDto userRequestDto) throws UserException {
 
@@ -71,6 +74,7 @@ public class UserService {
 
     public void deleteById(long id){
         vehicleService.deleteByUserId(id);
+        alertService.deleteByUserId(id);
         userRepository.deleteById(id);
     }
 

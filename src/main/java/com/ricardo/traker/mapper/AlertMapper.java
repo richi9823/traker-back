@@ -43,16 +43,19 @@ public abstract class AlertMapper {
     @Mapping(target = "latitude", source = "arrival.latitude")
     @Mapping(target = "longitude", source = "arrival.longitude")
     @Mapping(target = "vehicles", ignore = true)
+    @Mapping(target = "type", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract  AlertArrivalEntity mapAlertRequestDtoToAlertArrivalEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertArrivalEntity alertEntity);
 
     @Mapping(target = "maxDistance", source = "distance.maxDistance")
     @Mapping(target = "vehicles", ignore = true)
+    @Mapping(target = "type", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract AlertDistanceEntity mapAlertRequestDtoToAlertDistanceEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertDistanceEntity alertEntity);
 
     @Mapping(target = "speedLimit", source = "speed.speedLimit")
     @Mapping(target = "vehicles", ignore = true)
+    @Mapping(target = "type", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract  AlertSpeedEntity mapAlertRequestDtoToAlertSpeedEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertSpeedEntity alertEntity);
 

@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @Where(clause = "deleted_at IS NULL")
-@SQLDelete(sql = "UPDATE gps_device SET deleted_at = now() WHERE id = ?")
+@SQLDelete(sql = "UPDATE gps_device SET deleted_at = now() WHERE traccar_device_id = ?")
 public class GPSEntity extends SuperEntity{
 
     @Id

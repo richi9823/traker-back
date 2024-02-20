@@ -4,15 +4,12 @@ import com.ricardo.traker.enums.GPSStatusEnum;
 import com.ricardo.traker.exception.ServiceException;
 import com.ricardo.traker.mapper.GPSDeviceMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
-import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
-import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.GPSResponseDto;
 import com.ricardo.traker.model.dto.response.GPSShortResponseDto;
 import com.ricardo.traker.model.entity.GPSEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.repository.GPSRepository;
-import com.ricardo.traker.repository.VehicleRepository;
 import com.ricardo.traker.traccar.Device;
 import com.ricardo.traker.traccar.api.DevicesApi;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +20,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -114,8 +110,9 @@ public class GPSService {
         }
     }
 
-    public void deleteById(long id){
+    public void deleteById(Long id){
         routeService.deleteByGpsId(id);
+        devicesApi.devicesIdDelete(id.intValue());
         gpsRepository.deleteById(id);
     }
 
@@ -155,5 +152,9 @@ public class GPSService {
         device.disabled(true);
         devicesApi.devicesIdPut(gpsId.intValue(), device).block();
         return gpsMapper.mapEntityToResponse(gpsRepository.save(gps));
+    }
+
+    public Optional<GPSEntity> getGpsEntity(Long gpsId) {
+        return gpsRepository.findById(gpsId);
     }
 }

@@ -29,7 +29,8 @@ public interface AlertApi {
     ResponseEntity<?> removeAlert(@PathVariable Long alertId);
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    ResponseEntity<ListResponse<AlertShortResponseDto>> getAlerts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+    ResponseEntity<ListResponse<AlertShortResponseDto>> getAlerts(@RequestParam(value = "vehicleId", required = false) Long vehicleId,
+                                                            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                            @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                                                            @RequestParam(value = "sort", required = false, defaultValue = "modifiedDate") String sort);
 }

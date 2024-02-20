@@ -3,6 +3,7 @@ package com.ricardo.traker.model.entity.AlertEntity;
 import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.model.entity.NotificationEntity;
 import com.ricardo.traker.model.entity.SuperEntity;
+import com.ricardo.traker.model.entity.UserEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.traccar.Notification;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class AlertEntity extends SuperEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -49,4 +50,7 @@ public class AlertEntity extends SuperEntity {
     )
     @ManyToMany
     List<VehicleEntity> vehicles;
+
+    @ManyToOne
+    UserEntity user;
 }

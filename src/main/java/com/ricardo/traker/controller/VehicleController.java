@@ -63,8 +63,9 @@ public class VehicleController implements VehicleApi{
     @Override
     public ResponseEntity<VehicleResponseDto> editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) throws ServiceException {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+        if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(vehicleService.editVehicle(vehicleId, vehicleRequestDto));
     }
@@ -72,7 +73,9 @@ public class VehicleController implements VehicleApi{
     @Override
     public ResponseEntity<Void> removeVehicle(Long vehicleId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         vehicleService.deleteById(vehicleId);
         return ResponseEntity.ok().build();
     }
@@ -88,18 +91,30 @@ public class VehicleController implements VehicleApi{
 
     @Override
     public ResponseEntity<VehicleResponseDto> setImage(Long vehicleId, MultipartFile image) throws ServiceException {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(vehicleService.setImage(vehicleId, image));
     }
 
     @Override
     public ResponseEntity<VehicleResponseDto> deleteImage(Long vehicleId) {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(vehicleService.deleteImage(vehicleId));
     }
 
     @Override
     public ResponseEntity<GPSResponseDto> addGPSDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok()
                 .body(vehicleService.addGpsDevice(vehicleId, gpsDeviceRequestDto));
     }
