@@ -1,6 +1,5 @@
 package com.ricardo.traker.controller;
 
-import com.ricardo.traker.enums.IntervalEnum;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.RouteResponseDto;
 import com.ricardo.traker.model.dto.response.RouteShortResponseDto;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequestMapping("/api/route")
@@ -21,8 +21,8 @@ public interface RoutesApi {
     ResponseEntity<ListResponse<RouteShortResponseDto>> getVehicleRoutes(@PathVariable Long vehicleId,
                                                                          @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                          @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                         @RequestParam(value = "since", required = false) LocalDateTime since,
-                                                                         @RequestParam(value = "interval", required = false) IntervalEnum interval);
+                                                                         @RequestParam(value = "since", required = false) LocalDate since,
+                                                                         @RequestParam(value = "interval", required = false) LocalDate interval);
 
     @RequestMapping(value = "/{routeId}", method = RequestMethod.GET)
     ResponseEntity<RouteResponseDto> getRoute(@PathVariable Long routeId);

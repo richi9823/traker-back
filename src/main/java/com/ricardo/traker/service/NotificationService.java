@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,15 @@ public class NotificationService {
         NotificationEntity notificationEntity = new NotificationEntity();
         notificationEntity.setAlert(alert);
         notificationEntity.setRead(false);
-        return notificationRepository.save(notificationEntity);
+        return this.addPositionToNotification(position, notificationRepository.save(notificationEntity));
+    }
+
+    NotificationEntity addPositionToNotification(PositionEntity position, NotificationEntity notification){
+        if(notification.getPositions() == null){
+            notification.setPositions(new ArrayList<>());
+        }
+        notification.getPositions().add(position);
+        return notificationRepository.save(notification);
     }
 
 

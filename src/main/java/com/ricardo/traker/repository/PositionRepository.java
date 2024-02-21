@@ -1,6 +1,6 @@
 package com.ricardo.traker.repository;
 
-import com.ricardo.traker.enums.IntervalEnum;
+
 import com.ricardo.traker.model.entity.PositionEntity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +14,5 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Long> 
 
     void deleteByRoute_id(long routeId);
 
-    Optional<PositionEntity> findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(Long vehicleId);
+    List<PositionEntity> findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(Long vehicleId);
 }

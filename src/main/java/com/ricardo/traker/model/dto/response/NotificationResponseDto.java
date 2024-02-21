@@ -1,11 +1,9 @@
 package com.ricardo.traker.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertShortResponseDto;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class NotificationResponseDto {
 
     private VehicleShortResponseDto vehicle;
 
-    private List<PositionsResponseDto> positions;
+    private List<PositionResponseDto> positions;
 
     @JsonProperty("created_date")
     private OffsetDateTime createdDate;

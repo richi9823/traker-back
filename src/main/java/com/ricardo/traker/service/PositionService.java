@@ -1,17 +1,14 @@
 package com.ricardo.traker.service;
 
 import com.ricardo.traker.mapper.PositionMapper;
-import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.PositionsWebSocket;
-import com.ricardo.traker.model.dto.response.PositionsResponseDto;
-import com.ricardo.traker.model.entity.GPSEntity;
+import com.ricardo.traker.model.dto.response.FullPositionResponseDto;
+import com.ricardo.traker.model.dto.response.PositionResponseDto;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.RouteEntity;
 import com.ricardo.traker.repository.PositionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -52,9 +49,13 @@ public class PositionService {
     }
 
 
-    public PositionsResponseDto getPosition(Long vehicleId) {
-        PositionEntity pos = positionRepository.findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Last position not found"));
-        return  positionMapper.mapPositionEntityToPositionResponse(pos);
+    public FullPositionResponseDto getPosition(Long vehicleId) {
+        List<PositionEntity> pos = positionRepository.findOneByRoute_Gps_Vehicle_IdOrderByTimeDesc(vehicleId);
+        if(pos.isEmpty()){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Last position not found");
+        }else{
+            return  positionMapper.mapPositionEntityToFullPositionResponse(pos.get(0));
+        }
     }
 
 

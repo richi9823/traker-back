@@ -24,6 +24,9 @@ public class GPSResponseDto {
 
     private GPSStatusEnum status;
 
+    @JsonProperty("traccar_status")
+    private String traccarStatus;
+
     @JsonProperty("total_distance")
     private BigDecimal totalDistance;
 

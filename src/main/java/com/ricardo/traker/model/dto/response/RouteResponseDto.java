@@ -20,5 +20,5 @@ public class RouteResponseDto {
     @JsonProperty("total_distance")
     private BigDecimal totalDistance;
 
-    private List<PositionsResponseDto> positions;
+    private List<PositionResponseDto> positions;
 }

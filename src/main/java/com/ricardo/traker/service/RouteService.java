@@ -1,7 +1,6 @@
 package com.ricardo.traker.service;
 
-import com.ricardo.traker.enums.IntervalEnum;
-import com.ricardo.traker.model.dto.MessageWebSocket;
+
 import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.model.dto.response.RouteResponseDto;
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -88,9 +87,11 @@ public class RouteService {
         routeRepository.deleteById(id);
     }
 
-    public ListResponse<RouteShortResponseDto> getRoutes(Long vehicleId, Integer page, Integer size, LocalDateTime since, IntervalEnum interval) {
-        Specification<RouteEntity> specification = Specification.where(RouteRepository.hasVehicle(vehicleId))
-                .and(RouteRepository.hasInterval(since, interval));
+    public ListResponse<RouteShortResponseDto> getRoutes(Long vehicleId, Integer page, Integer size, LocalDate since, LocalDate until) {
+        Specification<RouteEntity> specification = Specification.where(RouteRepository.hasVehicle(vehicleId));
+        if(since != null && until != null){
+            specification = specification.and(RouteRepository.hasInterval(since, until));
+        }
         Page<RouteEntity> result = routeRepository.findAll(specification, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "start")));
         ListResponse<RouteShortResponseDto> response = new ListResponse<>();
         response.setItems(result.get().map(routeMapper::mapEntityToShortResponse)
@@ -101,5 +102,9 @@ public class RouteService {
 
     public RouteResponseDto getRoute(Long id) {
         return routeRepository.findById(id).map(routeMapper::mapEntityToResponse).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found - " + id));
+    }
+
+    public Optional<RouteEntity> getRouteEntity(Long id) {
+        return routeRepository.findById(id);
     }
 }

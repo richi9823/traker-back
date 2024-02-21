@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -145,22 +146,21 @@ public class AlertService {
 
 
     public void checkAlerts(PositionEntity newPosition) {
-        /*vehicleService.getVehicleEntityByGpsId(newPosition.getGps().getTraccarDeviceId()).ifPresent(
-                v -> {
-                    List<AlertResponseDto> alerts = this.getVehicleAlerts(v.getId());
-                    alerts.stream().forEach(a -> {
-                        switch (a.getType()){
-                            case DISTANCE -> checkDistance(a.getId(), newPosition);
-                            case ARRIVAL -> checkArrival(a.getId(), newPosition);
-                            case SPEED -> checkSpeed(a.getId(), newPosition);
-                        }
-                    });
-                }
-        );*/
+            Specification<AlertEntity> specification = Specification.where(AlertRepository.hasVehicle(newPosition.getRoute().getGps().getVehicle().getId().longValue()));
+           List<AlertResponseDto> alerts = alertRepository.findAll(specification).stream().map(alertMapper::mapAlertEntityToAlertResponseDto).collect(Collectors.toList());
+           alerts.stream().forEach(a -> {
+               switch (a.getType()){
+                   case DISTANCE -> checkDistance(a.getId(), newPosition);
+                   case ARRIVAL -> checkArrival(a.getId(), newPosition);
+                   case SPEED -> checkSpeed(a.getId(), newPosition);
+               }
+           });
+
+
     }
 
-    private void checkDistance(Integer id, PositionEntity position){
-        /*alertDistanceRepository.findById(id).ifPresent(
+    private void checkDistance(Long id, PositionEntity position){
+        alertDistanceRepository.findById(id).ifPresent(
                 a ->{
                    BigDecimal distanceKm = BigDecimal.valueOf(Math.acos(Math.sin(a.getPointReferenceLatitude().doubleValue()) * Math.sin(position.getLatitude().doubleValue())
                             + Math.cos(a.getPointReferenceLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getPointReferenceLongitude().doubleValue()))
@@ -171,52 +171,52 @@ public class AlertService {
                             notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
                        }
 
-                       if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(10))){
-                           position.setNotification(notifications.get());
+                       if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
+                           notificationService.addPositionToNotification(position, notifications.get());
                        }else{
                            NotificationEntity notificationEntity = notificationService.createNotification(a, position);
-                           position.setNotification(notificationEntity);
+                           notificationService.addPositionToNotification(position, notificationEntity);
                        }
 
                    }
 
                 }
-        );*/
+        );
     }
 
-    private void checkArrival(Integer id, PositionEntity position){
-        /*alertArrivalRepository.findById(id).ifPresent(a ->{
+    private void checkArrival(Long id, PositionEntity position){
+        alertArrivalRepository.findById(id).ifPresent(a ->{
             BigDecimal distanceKm = BigDecimal.valueOf(Math.acos(Math.sin(a.getLatitude().doubleValue()) * Math.sin(position.getLatitude().doubleValue())
                     + Math.cos(a.getLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getLongitude().doubleValue()))
                     * 6371);
             if(BigDecimal.valueOf(10).compareTo(distanceKm) > 0){
                 Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
-                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(30))){
-                    position.setNotification(notifications.get());
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(30))){
+                    notificationService.addPositionToNotification(position, notifications.get());
                 }else{
                     NotificationEntity notificationEntity = notificationService.createNotification(a, position);
-                    position.setNotification(notificationEntity);
+                    notificationService.addPositionToNotification(position, notificationEntity);
                 }
 
             }
-        });*/
+        });
 
 
     }
 
-    private void checkSpeed(Integer id, PositionEntity position){
-        /*alertSpeedRepository.findById(id).ifPresent(a ->{
+    private void checkSpeed(Long id, PositionEntity position){
+        alertSpeedRepository.findById(id).ifPresent(a ->{
             if(a.getSpeedLimit().compareTo(position.getSpeed()) < 0){
                 Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
-                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(LocalDateTime.now().minusMinutes(5))){
-                    position.setNotification(notifications.get());
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(5))){
+                    notificationService.addPositionToNotification(position, notifications.get());
                 }else{
                     NotificationEntity notificationEntity = notificationService.createNotification(a, position);
-                    position.setNotification(notificationEntity);
+                    notificationService.addPositionToNotification(position, notificationEntity);
                 }
 
             }
-        });*/
+        });
     }
 
 
