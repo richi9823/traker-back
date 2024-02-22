@@ -12,7 +12,9 @@ public enum TypeAlertEnum {
 
     ARRIVAL("ARRIVAL"),
 
-    DISTANCE("DISTANCE");
+    DISTANCE("DISTANCE"),
+
+    DISTANCE_ROUTE("DISTANCE_ROUTE");
 
     private String value;
 

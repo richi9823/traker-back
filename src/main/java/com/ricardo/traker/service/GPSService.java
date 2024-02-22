@@ -95,7 +95,7 @@ public class GPSService {
                         g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
                         g.setTraccarStatus(d.getStatus());
                         gpsRepository.save(g);
-                        log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
+                        log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate() + " - " + d.getStatus());
                     }
                 });
             });

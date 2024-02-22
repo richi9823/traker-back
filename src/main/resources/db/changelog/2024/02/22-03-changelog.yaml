@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1708638669428-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: vehicle_id
+                  type: INT
+            tableName: notification
+  - changeSet:
+      id: 1708638669428-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnName: vehicle_id
+            tableName: notification
+  - changeSet:
+      id: 1708638669428-3
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: notification
+            constraintName: FK_NOTIFICATION_ON_VEHICLE
+            referencedColumnNames: id
+            referencedTableName: vehicle
+            referencedTableSchemaName: public
+

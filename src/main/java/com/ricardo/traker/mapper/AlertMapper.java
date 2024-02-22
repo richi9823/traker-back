@@ -3,10 +3,7 @@ package com.ricardo.traker.mapper;
 import com.ricardo.traker.enums.TypeAlertEnum;
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.*;
-import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertSpeedEntity;
+import com.ricardo.traker.model.entity.AlertEntity.*;
 
 import org.mapstruct.*;
 
@@ -24,6 +21,10 @@ public abstract class AlertMapper {
     @Mapping(target = "vehicles", ignore = true)
     public  abstract AlertDistanceEntity mapAlertRequestDtoToAlertDistanceEntity(AlertRequestDto alertRequestDto);
 
+    @Mapping(target = "maxDistance", source = "distance.maxDistance")
+    @Mapping(target = "vehicles", ignore = true)
+    public  abstract AlertDistanceRouteEntity mapAlertRequestDtoToAlertDistanceRouteEntity(AlertRequestDto alertRequestDto);
+
     @Mapping(target = "speedLimit", source = "speed.speedLimit")
     @Mapping(target = "vehicles", ignore = true)
     public  abstract AlertSpeedEntity mapAlertRequestDtoToAlertSpeedEntity(AlertRequestDto alertRequestDto);
@@ -37,6 +38,7 @@ public abstract class AlertMapper {
             case SPEED -> this.mapAlertRequestDtoToAlertSpeedEntity(alertRequestDto);
             case ARRIVAL -> this.mapAlertRequestDtoToAlertArrivalEntity(alertRequestDto);
             case  DISTANCE -> this.mapAlertRequestDtoToAlertDistanceEntity(alertRequestDto);
+            case DISTANCE_ROUTE -> this.mapAlertRequestDtoToAlertDistanceRouteEntity(alertRequestDto);
         };
     }
 
@@ -52,6 +54,12 @@ public abstract class AlertMapper {
     @Mapping(target = "type", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public  abstract AlertDistanceEntity mapAlertRequestDtoToAlertDistanceEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertDistanceEntity alertEntity);
+
+    @Mapping(target = "maxDistance", source = "distance.maxDistance")
+    @Mapping(target = "vehicles", ignore = true)
+    @Mapping(target = "type", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    public  abstract AlertDistanceRouteEntity mapAlertRequestDtoToAlertDistanceRouteEntity(AlertRequestDto alertRequestDto, @MappingTarget AlertDistanceRouteEntity alertEntity);
 
     @Mapping(target = "speedLimit", source = "speed.speedLimit")
     @Mapping(target = "vehicles", ignore = true)

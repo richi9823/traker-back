@@ -43,7 +43,7 @@ public class RouteService {
     @Transactional
     public void updateRoutes(PositionsWebSocket position, GPSEntity gps){
         Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getTraccarDeviceId());
-        if(!positionService.positionExistById(position.getId()) && (gps.getMotion() || gps.getActualDistance().compareTo(BigDecimal.valueOf(10L)) > 0)){
+        if(!positionService.positionExistById(position.getId()) && (gps.getMotion() || gps.getActualDistance().compareTo(BigDecimal.ZERO) > 0)){
 
             lastRoute.ifPresentOrElse( r ->{
                 if(r.getPositions() != null){

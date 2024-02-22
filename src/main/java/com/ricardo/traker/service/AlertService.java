@@ -116,6 +116,12 @@ public class AlertService {
                 this.save(alertDistanceEntity);
                 yield alertMapper.mapAlertEntityToAlertResponseDto(alertDistanceEntity);
             }
+            case DISTANCE_ROUTE -> {
+                AlertDistanceEntity alertDistanceEntity = alertDistanceRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
+                alertDistanceEntity = alertMapper.mapAlertRequestDtoToAlertDistanceEntity(alertRequestDto, alertDistanceEntity);
+                this.save(alertDistanceEntity);
+                yield alertMapper.mapAlertEntityToAlertResponseDto(alertDistanceEntity);
+            }
         };
 
     }
@@ -153,6 +159,7 @@ public class AlertService {
                    case DISTANCE -> checkDistance(a.getId(), newPosition);
                    case ARRIVAL -> checkArrival(a.getId(), newPosition);
                    case SPEED -> checkSpeed(a.getId(), newPosition);
+                   case DISTANCE_ROUTE -> checkDistanceRoute(a.getId(), newPosition);
                }
            });
 
@@ -168,7 +175,7 @@ public class AlertService {
                    if(a.getMaxDistance().compareTo(distanceKm) < 0){
                        Optional<NotificationEntity> notifications = Optional.empty();
                        if(a.getNotifications() != null){
-                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                            notifications = a.getNotifications().stream().filter( n-> !n.isRead() && n.getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                        }
 
                        if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
@@ -179,6 +186,28 @@ public class AlertService {
                        }
 
                    }
+
+                }
+        );
+    }
+
+    private void checkDistanceRoute(Long id, PositionEntity position){
+        alertDistanceRepository.findById(id).ifPresent(
+                a ->{
+                    if(a.getMaxDistance().compareTo(position.getRoute().getTotalDistance()) < 0){
+                        Optional<NotificationEntity> notifications = Optional.empty();
+                        if(a.getNotifications() != null){
+                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                        }
+
+                        if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
+                            notificationService.addPositionToNotification(position, notifications.get());
+                        }else{
+                            NotificationEntity notificationEntity = notificationService.createNotification(a, position);
+                            notificationService.addPositionToNotification(position, notificationEntity);
+                        }
+
+                    }
 
                 }
         );

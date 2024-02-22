@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +36,7 @@ public class NotificationService {
         NotificationEntity notificationEntity = new NotificationEntity();
         notificationEntity.setAlert(alert);
         notificationEntity.setRead(false);
+        notificationEntity.setVehicle(position.getRoute().getGps().getVehicle());
         return this.addPositionToNotification(position, notificationRepository.save(notificationEntity));
     }
 
@@ -58,6 +60,10 @@ public class NotificationService {
         return notificationMapper.mapNotificationEntityToNotificationResponseDto(
                 notificationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("notification not found"))
         );
+    }
+
+    public Optional<NotificationEntity> getNotificationEntity(Long id) {
+        return notificationRepository.findById(id);
     }
 
 

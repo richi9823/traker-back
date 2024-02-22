@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,6 +34,10 @@ public class NotificationController implements NotificationApi{
 
     @Override
     public ResponseEntity<?> readNotification(Long notificationId) {
+        UserDetailsImpl userDetails = tokenUtils.getUser(request);
+        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getVehicle().getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         notificationService.readNotification(notificationId);
         return ResponseEntity.ok().build();
     }
@@ -40,7 +45,9 @@ public class NotificationController implements NotificationApi{
     @Override
     public ResponseEntity<NotificationResponseDto> getNotification(Long notificationId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getVehicle().getUser().getId().equals(userDetails.getId())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok(
                 notificationService.getNotification(notificationId)
         );

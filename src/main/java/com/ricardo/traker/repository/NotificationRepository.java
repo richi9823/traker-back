@@ -16,12 +16,12 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 
     static Specification<NotificationEntity> userIs(Long userId){
         return (root, query, criteriaBuilder)
-                ->  criteriaBuilder.equal(root.get("alert").get("vehicle").get("user").get("id"), userId);
+                ->  criteriaBuilder.equal(root.get("vehicle").get("user").get("id"), userId);
     }
 
     static Specification<NotificationEntity> vehicleIs(Long vehicleId){
         return (root, query, criteriaBuilder)
-                ->  criteriaBuilder.equal(root.get("alert").get("vehicle").get("id"), vehicleId);
+                ->  criteriaBuilder.equal(root.get("vehicle").get("id"), vehicleId);
     }
 
     static Specification<NotificationEntity> alertIs(Long alertId){

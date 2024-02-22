@@ -11,6 +11,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", uses = {PositionMapper.class})
 public interface RouteMapper {
 
+    @Mapping(target = "init", source = "start")
     RouteResponseDto mapEntityToResponse(RouteEntity route);
 
     @Mapping(target = "init", source = "start")

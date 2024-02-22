@@ -8,6 +8,11 @@
       </database-info>
     </database-infos>
   </component>
+  <component name="JpaLiquibaseChangesConfig">
+    <exclude-change idName="notification#vehicle_id" tagName="addColumn" />
+    <exclude-change idName="notification#vehicle_id" tagName="addNotNullConstraint" />
+    <exclude-change idName="FK_NOTIFICATION_ON_VEHICLE" tagName="addForeignKeyConstraint" />
+  </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>
       <persistence-unit name="Default" defaultIncludeChangeLogFile="src/main/resources/db/changelog/db.changelog-master.yaml">

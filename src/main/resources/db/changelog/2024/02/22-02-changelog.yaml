@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1708637430182-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: alert_distance_route_seq
+            startValue: 1
+  - changeSet:
+      id: 1708637430182-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_alert_distance_route
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: max_distance
+                  type: DECIMAL
+            tableName: alert_distance_route
+  - changeSet:
+      id: 1708637430182-3
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: alert_distance_route
+            constraintName: FK_ALERT_DISTANCE_ROUTE_ON_ID
+            referencedColumnNames: id
+            referencedTableName: alert
+            referencedTableSchemaName: public
+

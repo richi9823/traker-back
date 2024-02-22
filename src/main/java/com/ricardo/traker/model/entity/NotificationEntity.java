@@ -32,6 +32,10 @@ public class NotificationEntity extends SuperEntity {
     @JoinColumn(name = "alert_id", nullable = false, updatable = false)
     private AlertEntity alert;
 
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id", nullable = false, updatable = false)
+    private VehicleEntity vehicle;
+
     @JoinTable(
             name = "notifications_positions",
             joinColumns = @JoinColumn(name = "notification_id", nullable = false),
