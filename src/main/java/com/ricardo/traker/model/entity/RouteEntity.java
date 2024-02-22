@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -32,6 +33,9 @@ public class RouteEntity extends SuperEntity {
     private OffsetDateTime start;
 
     private OffsetDateTime finish;
+
+    @Column(name = "total_distance")
+    private BigDecimal totalDistance;
 
     @OneToMany(mappedBy = "route", fetch = FetchType.EAGER)
     private List<PositionEntity> positions;

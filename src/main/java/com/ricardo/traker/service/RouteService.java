@@ -42,8 +42,9 @@ public class RouteService {
 
     @Transactional
     public void updateRoutes(PositionsWebSocket position, GPSEntity gps){
-        if(!positionService.positionExistById(position.getId()) && (gps.getMotion() || gps.getActualDistance().compareTo(BigDecimal.valueOf(20L)) > 0)){
-            Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getTraccarDeviceId());
+        Optional<RouteEntity> lastRoute = routeRepository.findOneByGps_TraccarDeviceIdAndFinishIsNullOrderByStartDesc(gps.getTraccarDeviceId());
+        if(!positionService.positionExistById(position.getId()) && (gps.getMotion() || gps.getActualDistance().compareTo(BigDecimal.valueOf(10L)) > 0)){
+
             lastRoute.ifPresentOrElse( r ->{
                 if(r.getPositions() != null){
                     Optional<PositionEntity> lastPosition = r.getPositions().stream().reduce(CompareDate::maxPosition);
@@ -53,6 +54,7 @@ public class RouteService {
                             routeRepository.save(r);
                             positionService.updatePositions(position, this.createRoute(gps));
                         }else{
+                            r.setTotalDistance(r.getTotalDistance().add(gps.getActualDistance()));
                             positionService.updatePositions(position, r);
                         }
                     });
@@ -71,6 +73,7 @@ public class RouteService {
                 RouteEntity.builder()
                         .start(OffsetDateTime.now())
                         .gps(gps)
+                        .totalDistance(gps.getActualDistance())
                         .build()
         );
     }
