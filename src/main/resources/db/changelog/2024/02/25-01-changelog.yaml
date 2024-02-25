@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1708897083802-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: notification
+            constraintName: fk_notification_on_vehicle
+  - changeSet:
+      id: 1708897083802-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropColumn:
+            columnName: vehicle_id
+            tableName: notification
+

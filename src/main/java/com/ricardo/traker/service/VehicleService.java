@@ -50,6 +50,9 @@ public class VehicleService {
     @Autowired
     ImageService imageService;
 
+    @Autowired
+    AlertService alertService;
+
 
 
     public VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Long userId) throws ServiceException {
@@ -149,6 +152,7 @@ public class VehicleService {
     }
 
     public void deleteById(long id){
+        alertService.deleteNotificationsByVehicleId(id);
         gpsService.deleteByVehicleId(id);
         vehicleRepository.deleteById(id);
     }

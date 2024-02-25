@@ -116,10 +116,10 @@ public class AlertService {
                 yield alertMapper.mapAlertEntityToAlertResponseDto(alertDistanceEntity);
             }
             case DISTANCE_ROUTE -> {
-                AlertDistanceEntity alertDistanceEntity = alertDistanceRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
-                alertDistanceEntity = alertMapper.mapAlertRequestDtoToAlertDistanceEntity(alertRequestDto, alertDistanceEntity);
-                this.save(alertDistanceEntity);
-                yield alertMapper.mapAlertEntityToAlertResponseDto(alertDistanceEntity);
+                AlertDistanceRouteEntity alertDistanceRouteEntity = alertDistanceRouteRepository.findById(alertId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found"));
+                alertDistanceRouteEntity = alertMapper.mapAlertRequestDtoToAlertDistanceRouteEntity(alertRequestDto, alertDistanceRouteEntity);
+                this.save(alertDistanceRouteEntity);
+                yield alertMapper.mapAlertEntityToAlertResponseDto(alertDistanceRouteEntity);
             }
         };
 
@@ -276,6 +276,18 @@ public class AlertService {
         for(var alert : alerList){
             this.deleteById(alert.getId());
         }
+    }
+
+    public void deleteNotificationsByVehicleId(long id){
+        Specification<AlertEntity> specification = Specification.where(AlertRepository.hasVehicle(id));
+        var alerList = alertRepository.findAll(specification);
+        alerList
+            .stream()
+            .flatMap( a -> a.getNotifications().stream())
+            .filter(n -> n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(id))
+            .forEach( not ->
+                    notificationService.deleteById(not.getId())
+            );
     }
 
 }
