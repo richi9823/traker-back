@@ -36,16 +36,17 @@ public class NotificationService {
         NotificationEntity notificationEntity = new NotificationEntity();
         notificationEntity.setAlert(alert);
         notificationEntity.setRead(false);
-        notificationEntity.setVehicle(position.getRoute().getGps().getVehicle());
-        return this.addPositionToNotification(position, notificationRepository.save(notificationEntity));
+        notificationEntity.setPositions(new ArrayList<>());
+        notificationEntity.getPositions().add(position);
+        return notificationRepository.save(notificationEntity);
     }
 
     NotificationEntity addPositionToNotification(PositionEntity position, NotificationEntity notification){
-        if(notification.getPositions() == null){
-            notification.setPositions(new ArrayList<>());
+        if(notification.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())){
+            notification.getPositions().add(position);
+            return notificationRepository.save(notification);
         }
-        notification.getPositions().add(position);
-        return notificationRepository.save(notification);
+        throw new RuntimeException("Exception saving notification");
     }
 
 

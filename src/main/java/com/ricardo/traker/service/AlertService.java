@@ -5,10 +5,7 @@ import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertShortResponseDto;
 import com.ricardo.traker.model.dto.response.ListResponse;
-import com.ricardo.traker.model.entity.AlertEntity.AlertArrivalEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertDistanceEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertEntity;
-import com.ricardo.traker.model.entity.AlertEntity.AlertSpeedEntity;
+import com.ricardo.traker.model.entity.AlertEntity.*;
 import com.ricardo.traker.model.entity.NotificationEntity;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.VehicleEntity;
@@ -37,6 +34,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class AlertService {
+    @Autowired
+    AlertDistanceRouteRepository alertDistanceRouteRepository;
 
     @Autowired
     AlertRepository alertRepository;
@@ -175,7 +174,8 @@ public class AlertService {
                    if(a.getMaxDistance().compareTo(distanceKm) < 0){
                        Optional<NotificationEntity> notifications = Optional.empty();
                        if(a.getNotifications() != null){
-                            notifications = a.getNotifications().stream().filter( n-> !n.isRead() && n.getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
+                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()
+                                    && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                        }
 
                        if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
@@ -197,8 +197,10 @@ public class AlertService {
                     if(a.getMaxDistance().compareTo(position.getRoute().getTotalDistance()) < 0){
                         Optional<NotificationEntity> notifications = Optional.empty();
                         if(a.getNotifications() != null){
-                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                            notifications = a.getNotifications().stream().filter( n-> !n.isRead()
+                                    && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                         }
+
 
                         if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
                             notificationService.addPositionToNotification(position, notifications.get());
@@ -219,7 +221,11 @@ public class AlertService {
                     + Math.cos(a.getLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getLongitude().doubleValue()))
                     * 6371);
             if(BigDecimal.valueOf(10).compareTo(distanceKm) > 0){
-                Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                Optional<NotificationEntity> notifications = Optional.empty();
+                if(a.getNotifications() != null){
+                    notifications = a.getNotifications().stream().filter( n-> !n.isRead()
+                            && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
+                }
                 if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(30))){
                     notificationService.addPositionToNotification(position, notifications.get());
                 }else{
@@ -236,7 +242,11 @@ public class AlertService {
     private void checkSpeed(Long id, PositionEntity position){
         alertSpeedRepository.findById(id).ifPresent(a ->{
             if(a.getSpeedLimit().compareTo(position.getSpeed()) < 0){
-                Optional<NotificationEntity> notifications = a.getNotifications().stream().filter( n-> !n.isRead()).reduce(CompareDate:: maxNotificationEntity);
+                Optional<NotificationEntity> notifications = Optional.empty();
+                if(a.getNotifications() != null){
+                    notifications = a.getNotifications().stream().filter( n-> !n.isRead()
+                            && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
+                }
                 if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(5))){
                     notificationService.addPositionToNotification(position, notifications.get());
                 }else{
@@ -256,6 +266,8 @@ public class AlertService {
             alertArrivalRepository.save((AlertArrivalEntity) alertEntity);
         }else if (alertEntity instanceof AlertDistanceEntity){
             alertDistanceRepository.save((AlertDistanceEntity) alertEntity);
+        }else if (alertEntity instanceof AlertDistanceRouteEntity){
+            alertDistanceRouteRepository.save((AlertDistanceRouteEntity) alertEntity);
         }
     }
 
