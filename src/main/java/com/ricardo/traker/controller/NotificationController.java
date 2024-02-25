@@ -35,7 +35,7 @@ public class NotificationController implements NotificationApi{
     @Override
     public ResponseEntity<?> readNotification(Long notificationId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getVehicle().getUser().getId().equals(userDetails.getId())){
+        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getPositions().get(0).getRoute().getGps().getVehicle().getUser().getId().equals(userDetails.getId())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         notificationService.readNotification(notificationId);
@@ -45,7 +45,7 @@ public class NotificationController implements NotificationApi{
     @Override
     public ResponseEntity<NotificationResponseDto> getNotification(Long notificationId) {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
-        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getVehicle().getUser().getId().equals(userDetails.getId())){
+        if(!notificationService.getNotificationEntity(notificationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification_not found")).getPositions().get(0).getRoute().getGps().getVehicle().getUser().getId().equals(userDetails.getId())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(
