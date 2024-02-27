@@ -69,7 +69,14 @@ public class NotificationService {
 
 
     public ListResponse<NotificationShortResponseDto> getNotifications(Long userId, Long vehicleId, Long alertId, Boolean readed, Integer page, Integer size, String sort) {
-        Page<NotificationEntity> result = notificationRepository.findAll(Specification.where(NotificationRepository.userIs(userId)).and(NotificationRepository.vehicleIs(vehicleId)).and(NotificationRepository.alertIs(alertId)).and(NotificationRepository.readIs(readed)), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+        Specification specification = Specification.where(NotificationRepository.userIs(userId)).and(NotificationRepository.readIs(readed));
+        if(vehicleId != null){
+            specification = specification.and(NotificationRepository.hasVehicle(vehicleId));
+        }
+        if(alertId != null){
+            specification = specification.and(NotificationRepository.alertIs(alertId));
+        }
+        Page<NotificationEntity> result = notificationRepository.findAll(specification, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
         ListResponse<NotificationShortResponseDto> response = new ListResponse<>();
         response.setItems(result.get().map(notificationMapper::mapNotificationEntityToNotificationShortResponseDto)
                 .collect(Collectors.toList()));

@@ -28,10 +28,10 @@ public interface NotificationApi {
     @RequestMapping(value = "", method = RequestMethod.GET)
     ResponseEntity<ListResponse<NotificationShortResponseDto>> getNotifications(@RequestParam(required = false) Long vehicleId,
                                                                                 @RequestParam(required = false) Long alertId,
-                                                                                @RequestParam(required = false) Boolean readed,
+                                                                                @RequestParam(required = false, defaultValue = "false") Boolean readed,
                                                                                 @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                                 @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
-                                                                                @RequestParam(value = "sort", required = false, defaultValue = "readed") String sort);
+                                                                                @RequestParam(value = "sort", required = false, defaultValue = "read") String sort);
 
 
 }
