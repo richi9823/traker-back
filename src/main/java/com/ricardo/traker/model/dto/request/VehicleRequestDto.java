@@ -22,6 +22,11 @@ public class VehicleRequestDto {
 
     private String description;
 
-    private Optional<GPSDeviceRequestDto> deviceRequestDto;
+    private GPSDeviceRequestDto deviceRequestDto;
+
+    public Optional<GPSDeviceRequestDto> getDeviceRequestDto() {
+        return Optional.ofNullable(deviceRequestDto);
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.ricardo.traker.service;
 
 import com.ricardo.traker.enums.GPSStatusEnum;
 import com.ricardo.traker.exception.ServiceException;
+import com.ricardo.traker.exception.TrakerException;
 import com.ricardo.traker.mapper.GPSDeviceMapper;
 import com.ricardo.traker.model.dto.MessageWebSocket;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
@@ -44,7 +45,10 @@ public class GPSService {
     RouteService routeService;
 
 
-    public GPSResponseDto createGPS(VehicleEntity vehicle, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+    public GPSResponseDto createGPS(VehicleEntity vehicle, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException, TrakerException {
+        if(gpsRepository.existsByRegisterDeviceId(gpsDeviceRequestDto.getDeviceRegisterId())){
+            throw new TrakerException("Ese identificador ya existe", HttpStatus.CONFLICT);
+        }
         Device device = new Device();
         device.setUniqueId(gpsDeviceRequestDto.getDeviceRegisterId().toString());
         device.setName(gpsDeviceRequestDto.getName());

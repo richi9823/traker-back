@@ -1,6 +1,7 @@
 package com.ricardo.traker.controller;
 
 import com.ricardo.traker.exception.ServiceException;
+import com.ricardo.traker.exception.TrakerException;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 
@@ -24,13 +25,13 @@ public interface VehicleApi {
 
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    ResponseEntity<VehicleResponseDto> registerVehicle(@Valid @RequestBody VehicleRequestDto vehicleRequestDto) throws ServiceException;
+    ResponseEntity<VehicleResponseDto> registerVehicle(@Valid @RequestBody VehicleRequestDto vehicleRequestDto) throws ServiceException, TrakerException;
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.GET)
     ResponseEntity<VehicleResponseDto> getVehicle(@PathVariable Long vehicleId);
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.PUT)
-    ResponseEntity<VehicleResponseDto> editVehicle(@PathVariable Long vehicleId, @RequestBody VehicleRequestDto vehicleRequestDto) throws ServiceException;
+    ResponseEntity<VehicleResponseDto> editVehicle(@PathVariable Long vehicleId, @RequestBody VehicleRequestDto vehicleRequestDto) throws ServiceException, TrakerException;
 
     @RequestMapping(value = "/{vehicleId}", method = RequestMethod.DELETE)
     ResponseEntity<Void> removeVehicle(@PathVariable Long vehicleId);
@@ -48,5 +49,5 @@ public interface VehicleApi {
 
 
     @RequestMapping(value = "/{vehicleId}/device", method = RequestMethod.POST)
-    ResponseEntity<GPSResponseDto> addGPSDevice(@PathVariable Long vehicleId, @Valid @RequestBody GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException;
+    ResponseEntity<GPSResponseDto> addGPSDevice(@PathVariable Long vehicleId, @Valid @RequestBody GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException, TrakerException;
 }

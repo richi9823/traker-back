@@ -8,4 +8,6 @@ import java.util.List;
 public interface GPSRepository extends JpaRepository<GPSEntity, Long> {
 
     List<GPSEntity> findByVehicle_Id(long id);
+
+    boolean existsByRegisterDeviceId(long id);
 }

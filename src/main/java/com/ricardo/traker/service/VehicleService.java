@@ -1,6 +1,7 @@
 package com.ricardo.traker.service;
 
 import com.ricardo.traker.exception.ServiceException;
+import com.ricardo.traker.exception.TrakerException;
 import com.ricardo.traker.mapper.GPSDeviceMapper;
 import com.ricardo.traker.mapper.VehicleMapper;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
@@ -55,7 +56,10 @@ public class VehicleService {
 
 
 
-    public VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Long userId) throws ServiceException {
+    public VehicleResponseDto createVehicle(VehicleRequestDto vehicleRequestDto, Long userId) throws ServiceException, TrakerException {
+        if(vehicleRepository.existsByLicense(vehicleRequestDto.getLicense())){
+            throw new TrakerException("Ya existe un vehiculo con esa matricula", HttpStatus.CONFLICT);
+        }
         VehicleEntity vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequestDto);
         vehicleEntity.setUser(userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         vehicleEntity = vehicleRepository.save(vehicleEntity);
@@ -73,8 +77,12 @@ public class VehicleService {
     }
 
 
-    public VehicleResponseDto editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) throws ServiceException {
+    public VehicleResponseDto editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) throws ServiceException, TrakerException {
+
         VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
+        if(vehicleRequestDto.getLicense() != null && !vehicleRequestDto.getLicense().equals(vehicleEntity.getLicense()) && vehicleRepository.existsByLicense(vehicleRequestDto.getLicense())){
+            throw new TrakerException("Ya existe un vehiculo con esa matricula", HttpStatus.CONFLICT);
+        }
         vehicleEntity = vehicleMapper.mapVehicleRequestToVehicleEntity(vehicleRequestDto, vehicleEntity);
         var response = vehicleMapper.mapVehicleEntityToVehicleResponseDto(
                 vehicleRepository.save(vehicleEntity));
@@ -157,7 +165,7 @@ public class VehicleService {
         vehicleRepository.deleteById(id);
     }
 
-    public GPSResponseDto addGpsDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+    public GPSResponseDto addGpsDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException, TrakerException {
         VehicleEntity vehicleEntity = this.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
         return gpsService.createGPS(vehicleEntity, gpsDeviceRequestDto);
     }

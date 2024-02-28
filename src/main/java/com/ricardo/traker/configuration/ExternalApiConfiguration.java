@@ -1,5 +1,7 @@
 package com.ricardo.traker.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.ricardo.traker.traccar.ApiClient;
 import com.ricardo.traker.traccar.User;
 import com.ricardo.traker.traccar.api.DevicesApi;
@@ -30,6 +32,7 @@ public class ExternalApiConfiguration {
 
     @Value("${traccar.pass:demo}")
     private String password;
+
 
     @Bean
     public ApiClient traccarApi() {

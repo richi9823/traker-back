@@ -19,4 +19,6 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, Long>, J
     }
 
     List<VehicleEntity> findByUser_Id(Long id);
+
+    boolean existsByLicense(String license);
 }

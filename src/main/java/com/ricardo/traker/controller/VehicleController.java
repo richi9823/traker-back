@@ -1,6 +1,7 @@
 package com.ricardo.traker.controller;
 
 import com.ricardo.traker.exception.ServiceException;
+import com.ricardo.traker.exception.TrakerException;
 import com.ricardo.traker.model.dto.request.GPSDeviceRequestDto;
 import com.ricardo.traker.model.dto.request.VehicleRequestDto;
 import com.ricardo.traker.model.dto.response.GPSResponseDto;
@@ -42,7 +43,7 @@ public class VehicleController implements VehicleApi{
 
 
     @Override
-    public ResponseEntity<VehicleResponseDto> registerVehicle(@Valid VehicleRequestDto vehicleRequestDto) throws ServiceException {
+    public ResponseEntity<VehicleResponseDto> registerVehicle(@Valid VehicleRequestDto vehicleRequestDto) throws ServiceException, TrakerException {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -61,7 +62,7 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<VehicleResponseDto> editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) throws ServiceException {
+    public ResponseEntity<VehicleResponseDto> editVehicle(Long vehicleId, VehicleRequestDto vehicleRequestDto) throws ServiceException, TrakerException {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -110,7 +111,7 @@ public class VehicleController implements VehicleApi{
     }
 
     @Override
-    public ResponseEntity<GPSResponseDto> addGPSDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException {
+    public ResponseEntity<GPSResponseDto> addGPSDevice(Long vehicleId, GPSDeviceRequestDto gpsDeviceRequestDto) throws ServiceException, TrakerException {
         UserDetailsImpl userDetails = tokenUtils.getUser(request);
         if(!vehicleService.getVehicleEntity(vehicleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vehicle_not found")).getUser().getId().equals(userDetails.getId())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
