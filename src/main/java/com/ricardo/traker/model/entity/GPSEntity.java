@@ -36,9 +36,7 @@ public class GPSEntity extends SuperEntity{
 
     @Enumerated(EnumType.STRING)
     private GPSStatusEnum status;
-
-    @Column(name = "traccar_status")
-    private String traccarStatus;
+    
 
     @Column(name = "total_distance")
     private BigDecimal totalDistance;

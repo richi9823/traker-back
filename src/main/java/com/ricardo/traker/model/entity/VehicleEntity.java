@@ -40,6 +40,7 @@ public class VehicleEntity extends SuperEntity {
     private ImageEntity image;
 
     @OneToMany(mappedBy = "vehicle")
+    @OrderBy("created_date DESC")
     private List<GPSEntity> gps;
 
     @ManyToOne

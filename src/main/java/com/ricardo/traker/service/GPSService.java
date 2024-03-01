@@ -97,9 +97,8 @@ public class GPSService {
                 gpsRepository.findById(d.getId()).ifPresent(g -> {
                     if(g.getStatus().equals(GPSStatusEnum.ACTIVE)){
                         g.setLastUpdated(OffsetDateTime.ofInstant(d.getLastUpdate().toInstant(), ZoneId.systemDefault()));
-                        g.setTraccarStatus(d.getStatus());
                         gpsRepository.save(g);
-                        log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate() + " - " + d.getStatus());
+                        log.info("Device updated - id:" + d.getId() + " - " + d.getLastUpdate());
                     }
                 });
             });

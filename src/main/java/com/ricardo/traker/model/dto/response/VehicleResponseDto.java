@@ -22,6 +22,8 @@ public class VehicleResponseDto {
 
     private String image;
 
+    private String description;
+
     @Builder.Default
     private List<GPSShortResponseDto> gps = new ArrayList<>();
 
