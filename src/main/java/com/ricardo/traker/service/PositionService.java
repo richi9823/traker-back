@@ -3,7 +3,6 @@ package com.ricardo.traker.service;
 import com.ricardo.traker.mapper.PositionMapper;
 import com.ricardo.traker.model.dto.PositionsWebSocket;
 import com.ricardo.traker.model.dto.response.FullPositionResponseDto;
-import com.ricardo.traker.model.dto.response.PositionResponseDto;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.RouteEntity;
 import com.ricardo.traker.repository.PositionRepository;
@@ -60,7 +59,7 @@ public class PositionService {
 
 
     public void deletePositionsByRoute(long routeId) {
-        positionRepository.deleteByRoute_id(routeId);
+        positionRepository.deleteByRoute_Id(routeId);
     }
 
 
