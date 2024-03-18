@@ -13,6 +13,7 @@ import com.ricardo.traker.model.entity.VehicleEntity;
 import com.ricardo.traker.repository.GPSRepository;
 import com.ricardo.traker.traccar.Device;
 import com.ricardo.traker.traccar.api.DevicesApi;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,6 +114,7 @@ public class GPSService {
         }
     }
 
+    @Transactional
     public void deleteById(Long id){
         routeService.deleteByGpsId(id);
         devicesApi.devicesIdDelete(id.intValue());

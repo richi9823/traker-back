@@ -6,6 +6,7 @@ import com.ricardo.traker.model.dto.response.FullPositionResponseDto;
 import com.ricardo.traker.model.entity.PositionEntity;
 import com.ricardo.traker.model.entity.RouteEntity;
 import com.ricardo.traker.repository.PositionRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,7 @@ public class PositionService {
         }
     }
 
-
+    @Transactional
     public void deletePositionsByRoute(long routeId) {
         positionRepository.deleteByRoute_Id(routeId);
     }

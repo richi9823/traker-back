@@ -21,4 +21,6 @@ public class RouteResponseDto {
     private BigDecimal totalDistance;
 
     private List<PositionResponseDto> positions;
+
+    private GPSShortResponseDto gps;
 }
