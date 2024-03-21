@@ -35,7 +35,7 @@ public class VehicleEntity extends SuperEntity {
     @Column()
     private String description;
 
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private ImageEntity image;
 

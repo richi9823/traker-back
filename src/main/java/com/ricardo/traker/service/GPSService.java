@@ -52,7 +52,7 @@ public class GPSService {
         }
         Device device = new Device();
         device.setUniqueId(gpsDeviceRequestDto.getDeviceRegisterId().toString());
-        device.setName(gpsDeviceRequestDto.getName());
+        device.setName(gpsDeviceRequestDto.getDeviceRegisterId().toString());
         try {
             Mono<Device> response = devicesApi.devicesPost(device);
             GPSEntity gpsEntity = gpsMapper.mapDeviceToGpsEntity(response.block());
