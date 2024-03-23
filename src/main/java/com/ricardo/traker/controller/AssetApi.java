@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@RequestMapping("/asset")
+@RequestMapping("/api/asset")
 public interface AssetApi {
 
     @RequestMapping(value = "/{assetId}", method = RequestMethod.GET, produces = {"application/octet-stream"})
