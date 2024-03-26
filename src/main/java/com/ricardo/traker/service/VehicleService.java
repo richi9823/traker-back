@@ -70,8 +70,11 @@ public class VehicleService {
             response.setGps(new ArrayList<>());
         }
         if(vehicleRequestDto.getDeviceRequestDto().isPresent()){
-
-            response.getGps().add(gpsMapper.mapResponseToShortResponse(gpsService.createGPS(vehicleEntity, vehicleRequestDto.getDeviceRequestDto().get())));
+            GPSDeviceRequestDto gps = vehicleRequestDto.getDeviceRequestDto().get();
+            if(gps.getName() == null || gps.getName().isEmpty()){
+                gps.setName("Dispositivo - " + gps.getDeviceRegisterId());
+            }
+            response.getGps().add(gpsMapper.mapResponseToShortResponse(gpsService.createGPS(vehicleEntity, gps)));
         }
         return response;
     }
