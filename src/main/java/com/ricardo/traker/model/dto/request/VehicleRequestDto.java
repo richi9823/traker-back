@@ -22,6 +22,7 @@ public class VehicleRequestDto {
 
     private String description;
 
+    @JsonProperty("device_request_dto")
     private GPSDeviceRequestDto deviceRequestDto;
 
     public Optional<GPSDeviceRequestDto> getDeviceRequestDto() {
