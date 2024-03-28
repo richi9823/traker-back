@@ -194,7 +194,7 @@ public class AlertService {
     private void checkDistanceRoute(Long id, PositionEntity position){
         alertDistanceRepository.findById(id).ifPresent(
                 a ->{
-                    if(a.getMaxDistance().compareTo(position.getRoute().getTotalDistance()) < 0){
+                    if(a.getMaxDistance().multiply(BigDecimal.valueOf(1000)).compareTo(position.getRoute().getTotalDistance()) < 0){
                         Optional<NotificationEntity> notifications = Optional.empty();
                         if(a.getNotifications() != null){
                             notifications = a.getNotifications().stream().filter( n-> !n.isRead()
@@ -241,7 +241,7 @@ public class AlertService {
 
     private void checkSpeed(Long id, PositionEntity position){
         alertSpeedRepository.findById(id).ifPresent(a ->{
-            if(a.getSpeedLimit().compareTo(position.getSpeed()) < 0){
+            if(a.getSpeedLimit().multiply(BigDecimal.valueOf(1000)).compareTo(position.getSpeed()) < 0){
                 Optional<NotificationEntity> notifications = Optional.empty();
                 if(a.getNotifications() != null){
                     notifications = a.getNotifications().stream().filter( n-> !n.isRead()
