@@ -67,7 +67,7 @@ public class AlertService {
         List<VehicleEntity> vehicles = new ArrayList<>();
         if(alertRequestDto.getVehicles() != null){
             alertRequestDto.getVehicles().stream().forEach(id->
-                   vehicles.add(vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
+                   vehicles.add(vehicleRepository.findByIdAndUser_Id(id, userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found id - " + id)))
             );
         }
         AlertEntity alertEntity = alertMapper.mapAlertRequestDtoToAlertEntity(alertRequestDto);
@@ -178,7 +178,7 @@ public class AlertService {
                                     && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                        }
 
-                       if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
+                       if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusSeconds(a.getArmedTime()))){
                            notificationService.addPositionToNotification(position, notifications.get());
                        }else{
                            NotificationEntity notificationEntity = notificationService.createNotification(a, position);
@@ -202,7 +202,7 @@ public class AlertService {
                         }
 
 
-                        if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(10))){
+                        if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusSeconds(a.getArmedTime()))){
                             notificationService.addPositionToNotification(position, notifications.get());
                         }else{
                             NotificationEntity notificationEntity = notificationService.createNotification(a, position);
@@ -220,13 +220,13 @@ public class AlertService {
             BigDecimal distanceKm = BigDecimal.valueOf(Math.acos(Math.sin(a.getLatitude().doubleValue()) * Math.sin(position.getLatitude().doubleValue())
                     + Math.cos(a.getLatitude().doubleValue())* Math.cos(position.getLatitude().doubleValue()) * Math.cos(position.getLongitude().doubleValue() - a.getLongitude().doubleValue()))
                     * 6371);
-            if(BigDecimal.valueOf(10).compareTo(distanceKm) > 0){
+            if(BigDecimal.valueOf(a.getRadio()).compareTo(distanceKm.multiply(BigDecimal.valueOf(1000))) > 0){
                 Optional<NotificationEntity> notifications = Optional.empty();
                 if(a.getNotifications() != null){
                     notifications = a.getNotifications().stream().filter( n-> !n.isRead()
                             && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                 }
-                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(30))){
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusSeconds(a.getArmedTime()))){
                     notificationService.addPositionToNotification(position, notifications.get());
                 }else{
                     NotificationEntity notificationEntity = notificationService.createNotification(a, position);
@@ -247,7 +247,7 @@ public class AlertService {
                     notifications = a.getNotifications().stream().filter( n-> !n.isRead()
                             && n.getPositions().get(0).getRoute().getGps().getVehicle().getId().equals(position.getRoute().getGps().getVehicle().getId())).reduce(CompareDate:: maxNotificationEntity);
                 }
-                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusMinutes(5))){
+                if(!notifications.isEmpty() && !notifications.get().getCreatedDate().isBefore(OffsetDateTime.now().minusSeconds(a.getArmedTime()))){
                     notificationService.addPositionToNotification(position, notifications.get());
                 }else{
                     NotificationEntity notificationEntity = notificationService.createNotification(a, position);

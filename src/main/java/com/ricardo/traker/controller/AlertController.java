@@ -1,6 +1,6 @@
 package com.ricardo.traker.controller;
 
-import com.ricardo.traker.exception.ServiceException;
+
 import com.ricardo.traker.model.dto.request.AlertRequest.AlertRequestDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertResponseDto;
 import com.ricardo.traker.model.dto.response.AlertResponse.AlertShortResponseDto;
@@ -8,7 +8,6 @@ import com.ricardo.traker.model.dto.response.ListResponse;
 import com.ricardo.traker.security.TokenUtils;
 import com.ricardo.traker.security.UserDetailsImpl;
 import com.ricardo.traker.service.AlertService;
-import com.ricardo.traker.service.VehicleService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 
 @RestController
 public class AlertController implements AlertApi{

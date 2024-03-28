@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 @Data
 public class AlertArrivalRequestDto {
 
+    private Long radio;
+
     private BigDecimal latitude;
 
     private BigDecimal longitude;

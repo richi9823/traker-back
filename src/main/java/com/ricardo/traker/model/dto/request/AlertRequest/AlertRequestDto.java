@@ -17,6 +17,11 @@ public class AlertRequestDto {
     private Boolean silenced;
 
     @NotNull
+    @JsonProperty("armed_time")
+    private Long armedTime;
+
+
+    @NotNull
     private TypeAlertEnum type;
 
     private Set<Long> vehicles;
@@ -24,6 +29,9 @@ public class AlertRequestDto {
     private AlertArrivalRequestDto arrival;
 
     private AlertDistanceRequestDto distance;
+
+    @JsonProperty("distance_route")
+    private AlertDistanceRouteRequestDto distanceRoute;
 
     private AlertSpeedRequestDto speed;
 

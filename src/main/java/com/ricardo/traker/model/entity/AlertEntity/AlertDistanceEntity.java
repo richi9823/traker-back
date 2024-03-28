@@ -19,7 +19,9 @@ public class AlertDistanceEntity extends  AlertEntity{
     @Column(name="max_distance" ,nullable = false)
     private BigDecimal maxDistance;
 
+    @Column(nullable = false)
     private BigDecimal pointReferenceLatitude;
 
+    @Column(nullable = false)
     private BigDecimal pointReferenceLongitude;
 }

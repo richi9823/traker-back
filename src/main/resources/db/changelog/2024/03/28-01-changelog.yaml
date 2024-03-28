@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1711623842102-1
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: VARCHAR(255)
+            columnName: name
+            tableName: alert
+            validate: true
+  - changeSet:
+      id: 1711623842102-2
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: DECIMAL
+            columnName: point_reference_latitude
+            tableName: alert_distance
+            validate: true
+  - changeSet:
+      id: 1711623842102-3
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: DECIMAL
+            columnName: point_reference_longitude
+            tableName: alert_distance
+            validate: true
+  - changeSet:
+      id: 1711623842102-4
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: boolean
+            columnName: silenced
+            tableName: alert
+            validate: true
+  - changeSet:
+      id: 1711623851191-5
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  defaultValueNumeric: !!float '10'
+                  name: armed_time
+                  type: integer
+            tableName: alert
+  - changeSet:
+      id: 1711623851191-6
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnName: armed_time
+            tableName: alert
+  - changeSet:
+      id: 1711623851191-7
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: radio
+                  type: BIGINT
+            tableName: alert_arrival
+  - changeSet:
+      id: 1711623851191-8
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnName: radio
+            tableName: alert_arrival
+  - changeSet:
+      id: 1711623851191-9
+      author: ricar (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropColumn:
+            columnName: traccar_status
+            tableName: gps_device
+

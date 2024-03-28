@@ -21,4 +21,7 @@ public class AlertArrivalEntity extends  AlertEntity{
 
     @Column(nullable = false)
     private BigDecimal longitude;
+
+    @Column(nullable = false)
+    private Long radio;
 }

@@ -12,6 +12,15 @@
     <exclude-change idName="notification#vehicle_id" tagName="addColumn" />
     <exclude-change idName="notification#vehicle_id" tagName="addNotNullConstraint" />
     <exclude-change idName="FK_NOTIFICATION_ON_VEHICLE" tagName="addForeignKeyConstraint" />
+    <exclude-change idName="alert#name" tagName="addNotNullConstraint" />
+    <exclude-change idName="alert_distance#point_reference_latitude" tagName="addNotNullConstraint" />
+    <exclude-change idName="alert_distance#point_reference_longitude" tagName="addNotNullConstraint" />
+    <exclude-change idName="alert#silenced" tagName="addNotNullConstraint" />
+    <exclude-change idName="gps_device#traccar_status" tagName="dropColumn" />
+    <exclude-change idName="alert_arrival#radio" tagName="addNotNullConstraint" />
+    <exclude-change idName="alert_arrival#radio" tagName="addColumn" />
+    <exclude-change idName="alert#armed_time" tagName="addNotNullConstraint" />
+    <exclude-change idName="alert#armed_time" tagName="addColumn" />
   </component>
   <component name="JpaPluginProjectSettings">
     <option name="lastSelectedLanguage" value="Kotlin" />

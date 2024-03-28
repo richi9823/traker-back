@@ -32,10 +32,14 @@ public class AlertEntity extends SuperEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false", nullable = false)
     private boolean silenced;
+
+    @Column(name = "armed_time", columnDefinition = "integer default 10", nullable = false)
+    private Long armedTime;
 
     @Enumerated(EnumType.STRING)
     private TypeAlertEnum type;

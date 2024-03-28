@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface VehicleRepository extends JpaRepository<VehicleEntity, Long>, JpaSpecificationExecutor<VehicleEntity> {
 
-    Optional<VehicleEntity> findByGps_TraccarDeviceId(Long id);
+    Optional<VehicleEntity> findByIdAndUser_Id(Long id, Long userId);
 
     static Specification<VehicleEntity> userIs(Long userId){
         return (root, query, criteriaBuilder)
